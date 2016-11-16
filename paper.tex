@@ -87,9 +87,37 @@ Istituto Italiano di Tecnologia, Via Morego 30, Genova, Italy
 
 
 \section{Introduction}
-...
+In different real-world domains, it may be easy to encode examples in a structured form. For example, in chemoinformatics there is a well known graph representation of the secondary structures of chemical compounds. Moreover, images can easily be represented as graph after segmentation, where adjacent objects (or regions) are liked.
+In these cases, specific machine learning techniques have to be adopted.
+Kernel methods are one option, where it suffices to adopt a kernel function defined for the kind of data under consideration. Then, standard (kernelized) learning algorithms (e.g. SVM) can be adopted.
 
-\section{Kernel for structure with Multiple Kernel Learning}
+With kernel methods, a user has usually to deal with a number of hyper-parameters to fix at hand. The values of these hyper-parameters can strongly affect the predictive performance of the method.
+Usually, these parameters are:
+\begin{enumerate}
+ \item the choice of the kernel to adopt;
+ \item the hyper-parameters of the selected kernel;
+ \item the hyper-parameters of the learning algorithm.
+\end{enumerate}
+One commonly adopted and simple approach to fix these parameters is to fix a-priori some possible values for each parameter, and to test each possible combination on a validation set. This approach is commonly referred to as grid-search (from the parameter grid).
+Then, only the best combination is used to predict the test set, in order to produce an unbiased error estimation of the method (if necessary).
+In particular, for each point in the grid, a learning procedure have to be computed. In the case of kernel algorithms, a different kernel matrix has to be computed for the hyper-parameters at points 1 and 2.
+This procedure may be very time consuming.
+A possible alleviation to this problem has been proposed in~\cite{Massimo2016}, where Multiple Kernel Learning has been used for combining different kernel matrices in a single learning procedure, instead of selecting the best parameters configuration.
+In this paper, we propose a new approach to parameter selection that, based on sub-sampling and Multiple Kernel Learning, is able to speedup the parameter selection phase by orders of manitude on real-world datasets.
+\section{Kernel for structures and Multiple Kernel Learning}
+When dealing with structured data, the choice of the kernel to adopt is a key step. Depending on the type of data under consideration, different proposals are available in literature, each one with a different tradeoff between predictive performance and computational time (of course, this tradeoff depends from the considered task).
+In this paper we focus on graphs, i.e. we consider each example to be a different graph.
+In this case, there are several graph kernels defined in literature based on random walks, shortest paths or subgraphs up to a fixed size[TODO]. The problem with these kernels is the high computational complexity, that makes them unapplicable to several real-world datasets.
+Recently, different almost linear time graph kernels have been defined in literature, and these are the ones we focus o in this paper.
+In the following we will give some details about the considered alternatives.
+\textcolor{red}{TODO}\\
+\begin{itemize}
+ \item WL
+ \item NSPDK
+ \item ODD$_{ST}$
+\end{itemize}
+
+
 ...
 
 \section{Our framework}
