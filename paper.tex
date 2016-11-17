@@ -105,9 +105,9 @@ This procedure may be very time consuming.
 A possible alleviation to this problem has been proposed in~\cite{Massimo2016}, where Multiple Kernel Learning has been used for combining different kernel matrices in a single learning procedure, instead of selecting the best parameters configuration.
 In this paper, we propose a new approach to parameter selection that, based on sub-sampling and Multiple Kernel Learning, is able to speedup the parameter selection phase by orders of manitude on real-world datasets.
 \section{Kernel for structures and Multiple Kernel Learning}
-When dealing with structured data, the choice of the kernel to adopt is a key step. Depending on the type of data under consideration, different proposals are available in literature, each one with a different tradeoff between predictive performance and computational time (of course, this tradeoff depends from the considered task).
+When dealing with structured data, the choice of the kernel to adopt is a key step. Depending on the type of data under consideration, different proposals are available in literature, each one with a different trade-off between predictive performance and computational time (of course, this trade-off depends from the considered task).
 In this paper we focus on graphs, i.e. we consider each example to be a different graph.
-In this case, there are several graph kernels defined in literature based on random walks, shortest paths or subgraphs up to a fixed size[TODO]. The problem with these kernels is the high computational complexity, that makes them unapplicable to several real-world datasets.
+In this case, there are several graph kernels defined in literature based on random walks, shortest paths or subgraphs up to a fixed size[TODO]. The problem with these kernels is the high computational complexity, that makes them inapplicable to several real-world datasets.
 Recently, different almost linear time graph kernels have been defined in literature, and these are the ones we focus o in this paper.
 In the following we will give some details about the considered alternatives.
 \textcolor{red}{TODO}\\
