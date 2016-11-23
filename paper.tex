@@ -2,7 +2,7 @@
 \usepackage{subfig}
 \usepackage{color}
 \usepackage{url}
-
+ 
 % My packages
 \usepackage{ctable} % for \specialrule command
 %\usepackage{tikz}
@@ -82,6 +82,7 @@
 \newcommand{\llambda}{\pmb{\lambda}}
 \newcommand{\mmu}{\pmb{\mu}}
 \newcommand{\pphi}{\pmb{\phi}}
+\newcommand{\res}[2]{$#1_{\pm#2}$}
 
 %***********************************************************************
 % !!!! IMPORTANT NOTICE ON TEXT MARGINS !!!!!
@@ -248,11 +249,87 @@ In the following sections, we will refer to this algorithm as EasyMKL\footnote{E
 %and we have to provide it only $\KK^A$, the dataset $\XX$ and $\yy$ to evaluate equation \ref{eq:easyeta}, and the EasyMKL regularization hyper-parameter $\Lambda$.
 
 
-\section{Our framework}
-...
+\section{Our framework (devo finire di sistemare)}
+In several problems solved using MKL paradigm, the number of kernels used can be very high and, when we use structured data as input, such as graph, the computational effort to calculare each of them can be expensive. Moreover each kernel requires an amount of memory that depends on the number of samples, making the MKL approach unpractical when the number of samples and the number of kernels are huge.
 
-\section{Experimental Results}
-\subsection{Dataset description}
+In order to avoid this problem, we propose a method to reduce the number of kernel matrices calculated, based on the robustness of weights vector $\eta$ over the number of training samples used.\\
+In particular if $\eta$, learned using the whole set of data, is similar to the weights vector $\eta_s$ learned using the same kernels calculated on a subset of data, then we can use directly $\eta_s$ in our model.
+In this way we can learn quickly the kernels combination, but we have to calculate each of them anyway.
+We want to take a step forward by using $\eta_s$ to perform a kernels selection, aiming to build the complete model using only the top kernels.\\
+The top kernels are those with the best margin-contribution defined in $\eta_s$.
+
+In the second phase, we calculate the top kernel matrices using the whole set of data, and then we use them in combination. The kernels discarded can be considered as noise and irrelevant in combination, so their elimination [???].
+In this way we calculate all kernels using a subset of data, and a subset of kernels using the whole training data.
+
+
+\section{Experimental Results (devo finire di sistemare)}
+Firstly, we performed some experiment to check the base of our method. In particular we want to observe how many samples are required to make $\eta$ and $\eta_s$ similar.
+\figurename\ \ref{fig:weights} shows the weights vector obtained by EasyMKL with different number of training samples.
+
+\begin{figure}[ħtb]
+\includegraphics[width=\textwidth]{img/weights_GDD.png}
+\caption{The weights vector learned by EasyMKL using $50\%$ and $25\%$ of training data. Blue regions represents the difference with the weights vector calculated on all data. }
+\label{weights}
+\end{figure}
+
+However, in this context, two weights vectors are similar if the top kernels are the same. The exact (rescaled eventually) values are useless, we have to chose the same kernels using a subset of data.
+The similarity metric used for comparison is the jaccard similarity score.
+\figurename\ \ref{fig:jaccard} shows the jaccard score by considering different percentage of top kernels and different number of training data used.
+
+\begin{figure}[htb]
+\centering
+\subfloat[a]{\includegraphics[width=0.42\textwidth]{img/CPDB_jaccard.png}}
+\subfloat[b]{\includegraphics[width=0.42\textwidth]{img/GDD_jaccard.png}}
+\caption{Average jaccard values between the indices of top kernels using a subset of training data and using the whole set.}
+\label{fig:jaccard}
+\end{figure}
+
+The datasets used in our experiments are: [???]
+
+In the first step of our method, we learn the weights vector $\eta_{10}$ using a subset $(10\%)$ of training data and the whole set of kernels. To do this, we perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. The hyperparameters are $(\lambda,C)$. We chose the top $10\%$ kernels using the weights vector with the best result in the cv procedure.\\
+In the latter step we calculate the complete matrix relative to the top kernels selected and use these kernels to fit the model. In particular we divided our approach in 3 sub-methods:
+\begin{itemize}
+\item{}use the EasyMKL algorithm to re-clculate the kernel with top kernels;
+\item{}calculate the resulting kernel as the average;
+\item{}use the same weights (rescaled) from the first learning step.
+\end{itemize}
+For testing, we compared our method with 3 hard baselines, that are:
+\begin{itemize}
+\item{}validation: we calculate all kernel matrices and select which has the best results in validation;
+\item{}average: we calculate the kernel as the average of all base kernels;
+\item{}combined: we use EasyMKL to combine the whole set of kernels;
+\end{itemize}
+In all baselined and in the latter training step of each proposed methods, we use a stratified nested 10-fold cross-validation to chose the best hyperparameters sets, that are $\lambda$ for models where we use EasyMKL and $C$ for all baselines and methods since we always use a SVM as base learner.
+
+
+\subsection{Results}
+[...]
+\begin{table}[]
+\centering
+\caption{My caption}
+\label{my-label}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l|c|lll|lll}
+\hline
+dataset & \# train & validation      & all (easy) & all (average) & subset\_easy & subset\_aver & subset\_w \\
+\hline
+CPDB    & 684 &$0.8753_{\pm0.029}$ & $0.8814_{\pm0.027}$ & $0.8809_{\pm0.029}$ & $0.8768_{\pm0.023}$ & $0.8850_{\pm0.027}$ & $0.8751_{\pm0.023}$ \\
+\\
+MUTAG   & 188 & \res{0.9023}{0.075} & \res{0.9310}{0.061} & \res{0.9309}{0.060} & \res{0.9292}{0.054} & \res{0.9292}{0.054} & \res{0.9331}{0.053}    \\
+\\
+CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.11} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
+\\
+GDD     & 1178 & \res{0.8647}{0.045} & \res{0.8719}{0.039} & \res{0.8675}{0.039} & \res{0.869}{0.041} & \res{0.8713}{0.043} & \res{0.8011}{0.036}    \\
+\\
+AIDS    & 1503 & \res{0.7797}{0.083} & \res{0.7775}{0.080} & \res{0.7712}{0.083} & \res{0.7845}{0.077} & \res{0.7690}{0.074} & \res{0.7673}{0.073}    \\
+\\
+NCI1    & 4110 & \res{0.8839}{0.043} & - & \res{0.8851}{0.041} & \res{0.8818}{0.043} & \res{0.8772}{0.047} & \res{0.8811}{0.044}    \\
+\\
+NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.024}  & \res{0.8713}{0.025} & \res{0.8680}{0.022}  \\
+\\
+\hline
+\end{tabular}}
+\end{table}
 
 \section{Conclusion}
 ...
