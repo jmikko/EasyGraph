@@ -168,27 +168,29 @@ Istituto Italiano di Tecnologia, Via Morego 30, Genova, Italy
 
 
 \section{Introduction}
-In different real-world domains, it may be easy to encode examples in a structured form. For example, in chemoinformatics there is a well known graph representation of the secondary structures of chemical compounds. Moreover, images can easily be represented as graph after segmentation, where adjacent objects (or regions) are linked.
+In different real-world domains, it may be easy to encode examples in a structured form. For example, in chemoinformatics there is a well known graph representation of the secondary structures of chemical compounds. Moreover, images can easily be represented as graph after segmentation, where adjacent objects (or regions) are liked.
 In these cases, specific machine learning techniques have to be adopted.
 Kernel methods are one option, where it suffices to adopt a kernel function defined for the kind of data under consideration. Then, standard (kernelized) learning algorithms (e.g. SVM) can be adopted.
 
-With kernel methods, a user has usually to deal with a number of hyper-parameters to fix at hand. The optimization of these hyper-parameters can strongly affect the predictive performance of the method.
-Usually, these parameters are: (i) the choice of the kernel to adopt; (ii) the hyper-parameters of the selected kernel; (iii)the hyper-parameters of the learning algorithm.
-A commonly adopted and simple approach to hyper-parameters optimization is to fix a-priori some possible values for each parameter (the combinations of these paraeters are referres to as \textit{parameters grid}).
-Then, the learning algorithm is trained for each possible parameters combination, and its performances are evaluated. This approach is commonly referred to as grid-search.
-
-
-The learning algorithm has to be trained for each hyper-parameter combination, and this procedure may be very time consuming.
+With kernel methods, a user has usually to deal with a number of hyper-parameters to fix at hand. The values of these hyper-parameters can strongly affect the predictive performance of the method.
+Usually, these parameters are:
+\begin{enumerate}
+ \item the choice of the kernel to adopt;
+ \item the hyper-parameters of the selected kernel;
+ \item the hyper-parameters of the learning algorithm.
+\end{enumerate}
+One commonly adopted and simple approach to fix these parameters is to fix a-priori some possible values for each parameter, and to test each possible combination on a validation set. This approach is commonly referred to as grid-search (from the parameter grid).
+Then, only the best combination is used to predict the test set, in order to produce an unbiased error estimation of the method (if necessary).
+In particular, for each point in the grid, a learning procedure have to be computed. In the case of kernel algorithms, a different kernel matrix has to be computed for the hyper-parameters at points 1 and 2.
+This procedure may be very time consuming.
 A possible alleviation to this problem has been proposed in~\cite{Massimo2016}, where Multiple Kernel Learning has been used for combining different kernel matrices in a single learning procedure, instead of selecting the best parameters configuration.
-In the case of kernel algorithms, a different kernel matrix has to be computed for each kernel and for each of their hyper-parameters combination. This step can also be time consuming, especially when dealing with data in a structured form.
 In this paper, we propose a new approach to parameter selection that, based on sub-sampling and Multiple Kernel Learning, is able to speedup the parameter selection phase by orders of manitude on real-world datasets.
 
-%\section{Kernel for structures and Multiple Kernel Learning}
-\section{Backgroung}
+\section{Kernel for structures and Multiple Kernel Learning}
 When dealing with structured data, the choice of the kernel to adopt is a key step. Depending on the type of data under consideration, different proposals are available in literature, each one with a different trade-off between predictive performance and computational time (of course, this trade-off depends from the considered task).
 In this paper we focus on graphs, i.e. we consider each example to be a different graph.
-In this case, there are several graph kernels defined in literature based on random walks~\cite{Kashima03marginalizedkernels,Mahe2004} ($O(n^3)$ computational complexity), shortest paths~\cite{Kriegel05shortestpath} ($O(n^4)$ computational complexity), subgraphs up to a fixed size~\cite{Shervashidze2009} . The problem with these kernels is the high computational complexity, that makes them inapplicable to several real-world datasets.
-Recently, different almost linear time graph kernels have been defined in literature \cite{Heinonen2009,NIPS2009_0533,Costa2010,Shervashidze2011,Dasan2012,DaSanMartino2016}, and these are the ones we focus o in this paper.
+In this case, there are several graph kernels defined in literature based on random walks, shortest paths or subgraphs up to a fixed size[TODO]. The problem with these kernels is the high computational complexity, that makes them inapplicable to several real-world datasets.
+Recently, different almost linear time graph kernels have been defined in literature, and these are the ones we focus o in this paper.
 In the following we will give some details about the considered alternatives.
 \textcolor{red}{TODO}\\
 \begin{itemize}
@@ -247,65 +249,63 @@ In the following sections, we will refer to this algorithm as EasyMKL\footnote{E
 %and we have to provide it only $\KK^A$, the dataset $\XX$ and $\yy$ to evaluate equation \ref{eq:easyeta}, and the EasyMKL regularization hyper-parameter $\Lambda$.
 
 
-\section{Our framework (devo finire di sistemare)}
-In several problems solved using MKL paradigm, the number of kernels used can be very high and, when we use structured data as input, such as graph, the computational effort to calculare each of them can be expensive. Moreover each kernel requires an amount of memory that depends on the number of samples, making the MKL approach unpractical when the number of samples and the number of kernels are huge.
+\section{Our framework}
+Often, to work well MKL algorithms require an high number of kernels, and when we use structured data as input, such as graphs, the computational effort to calculate each of them can be expensive. Moreover each kernel requires an amount of memory that depends on the number of samples, making the MKL approach unpractical when the number of samples and the number of kernels are huge.
+In order to avoid this problem, we propose a method to reduce the number of kernels, based on the robustness of combination vector $\eta$.\\
+In particular if $\eta$, the combination vector learned using the whole set of data and all kernel functions, is similar to the weights vector $\eta_s$ learned using the same kernels calculated on a subset of data, then we can use directly $\eta_s$ in our model.
+In this way we can learn quickly the kernels combination, but we have to calculate all kernels anyway.
+Furthermore, we can use values in $\eta_s$ to perform a ranking over kernels, removing those below a threshold.
+Then we fit the model using only the top kernels selected.
 
-In order to avoid this problem, we propose a method to reduce the number of kernel matrices calculated, based on the robustness of weights vector $\eta$ over the number of training samples used.\\
-In particular if $\eta$, learned using the whole set of data, is similar to the weights vector $\eta_s$ learned using the same kernels calculated on a subset of data, then we can use directly $\eta_s$ in our model.
-In this way we can learn quickly the kernels combination, but we have to calculate each of them anyway.
-We want to take a step forward by using $\eta_s$ to perform a kernels selection, aiming to build the complete model using only the top kernels.\\
-The top kernels are those with the best margin-contribution defined in $\eta_s$.
-
-In the second phase, we calculate the top kernel matrices using the whole set of data, and then we use them in combination. The kernels discarded can be considered as noise and irrelevant in combination, so their elimination [???].
-In this way we calculate all kernels using a subset of data, and a subset of kernels using the whole training data.
+In summary, in the first phase we chose the top kernels using a subset of data, in the latter, we calculate the top kernel matrices using the whole set of data, and then we use them in combination.
 
 
-\section{Experimental Results (devo finire di sistemare)}
-Firstly, we performed some experiment to check the base of our method. In particular we want to observe how many samples are required to make $\eta$ and $\eta_s$ similar.
-\figurename\ \ref{fig:weights} shows the weights vector obtained by EasyMKL with different number of training samples.
+\section{Experimental Results (settings?)}
+Firstly, we performed some experiments to observe how many samples are required to make $\eta$ and $\eta_s$ similar.
+The metric used for comparison is the jaccard similarity score. Indeed, in our context two weights vectors are similar is they provide the same top kernels.
+These experiments are summarized in \figurename\ \ref{fig:weights} and \ref{fig:jaccard}.
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
+\centering
 \includegraphics[width=\textwidth]{img/weights_GDD.png}
-\caption{The weights vector learned by EasyMKL using $50\%$ and $25\%$ of training data. Blue regions represents the difference with the weights vector calculated on all data. }
-\label{weights}
+\caption{The weights vector learned by EasyMKL using $50\%$ and $25\%$ of training data. Blue regions represents the comparison with the weights vector calculated using all data.}
+\label{fig:weights}
 \end{figure}
 
-However, in this context, two weights vectors are similar if the top kernels are the same. The exact (rescaled eventually) values are useless, we have to chose the same kernels using a subset of data.
-The similarity metric used for comparison is the jaccard similarity score.
-\figurename\ \ref{fig:jaccard} shows the jaccard score by considering different percentage of top kernels and different number of training data used.
-
-\begin{figure}[htb]
+\begin{figure}[!htb]
 \centering
 \subfloat[a]{\includegraphics[width=0.42\textwidth]{img/CPDB_jaccard.png}}
 \subfloat[b]{\includegraphics[width=0.42\textwidth]{img/GDD_jaccard.png}}
-\caption{Average jaccard values between the indices of top kernels using a subset of training data and using the whole set.}
+\caption{Average jaccard values and standard deviation in 50 runs between the indices of top kernels using a subset of training data and using the whole set.}
 \label{fig:jaccard}
 \end{figure}
 
-The datasets used in our experiments are: [???]
-
-In the first step of our method, we learn the weights vector $\eta_{10}$ using a subset $(10\%)$ of training data and the whole set of kernels. To do this, we perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. The hyperparameters are $(\lambda,C)$. We chose the top $10\%$ kernels using the weights vector with the best result in the cv procedure.\\
-In the latter step we calculate the complete matrix relative to the top kernels selected and use these kernels to fit the model. In particular we divided our approach in 3 sub-methods:
+In the first step of our method, we learn the weights vector $\eta_{10}$ using a subset $(10\%)$ of training data and the whole set of kernels. To do this, we perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. The hyperparameters are $(\lambda,C)$. Then we fit the model with the best combination and chose the top $10\%$ kernels.\\
+In the latter step we calculate the top kernel matrices and combine it to get the kernel. We propose three methods to perform this combination:
 \begin{itemize}
-\item{}use the EasyMKL algorithm to re-clculate the kernel with top kernels;
-\item{}calculate the resulting kernel as the average;
+\item{}use the EasyMKL algorithm;
+\item{}calculate the average of kernels;
 \item{}use the same weights (rescaled) from the first learning step.
 \end{itemize}
 For testing, we compared our method with 3 hard baselines, that are:
 \begin{itemize}
-\item{}validation: we calculate all kernel matrices and select which has the best results in validation;
+\item{}validation: we select the kernel which has the best result in validation;
 \item{}average: we calculate the kernel as the average of all base kernels;
 \item{}combined: we use EasyMKL to combine the whole set of kernels;
 \end{itemize}
-In all baselined and in the latter training step of each proposed methods, we use a stratified nested 10-fold cross-validation to chose the best hyperparameters sets, that are $\lambda$ for models where we use EasyMKL and $C$ for all baselines and methods since we always use a SVM as base learner.
+In all models, we use a SVM as base learner, and we select the hyperparameters using a nested 10-fold CV procedure. The hyperparameters are $\lambda\in\{0,0.1,0.2,\dots,1\}-\{0.5\}$ for models where we use EasyMKL and $C\in\{2^i, i:-3\dots6\}$.
+Note that for all baselines we need to calculate all kernel matrices using all of training data.
 
 
-\subsection{Results}
-[...]
+The datasets used in our experiments are: [???]
+
+The results of our experiments are showed in \tablename\ \ref{tab:res}.
+
+
 \begin{table}[]
 \centering
 \caption{My caption}
-\label{my-label}
+\label{tab:res}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{l|c|lll|lll}
 \hline
@@ -348,7 +348,7 @@ NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.0
 % - UNCOMMENT THE NEXT TWO LINES AND REPLACE 'Name_Of_Your_BibFile'
 
 \bibliographystyle{unsrt}
-\bibliography{donini,biblio,Mendeley}
+\bibliography{donini,biblio}
 
 \end{footnotesize}
 
