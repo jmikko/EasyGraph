@@ -187,8 +187,8 @@ In this paper, we propose a new approach to parameter selection that, based on s
 \section{Backgroung}
 When dealing with structured data, the choice of the kernel to adopt is a key step. Depending on the type of data under consideration, different proposals are available in literature, each one with a different trade-off between predictive performance and computational time (of course, this trade-off depends from the considered task).
 In this paper we focus on graphs, i.e. we consider each example to be a different graph.
-In this case, there are several graph kernels defined in literature based on random walks~\cite{Kashima2003,Mah'e2004} ($O(n^3)$ computational complexity), shortest paths~\cite{Borgwardt2005} ($O(n^4)$ computational complexity), subgraphs up to a fixed size~\cite{Shervashidze2009} . The problem with these kernels is the high computational complexity, that makes them inapplicable to several real-world datasets.
-Recently, different almost linear time graph kernels have been defined in literature \cite{Heinonen2009,Shervashidze2009a,Costa2010,Shervashidze2011,Dasan2012,DaSanMartino2016}, and these are the ones we focus o in this paper.
+In this case, there are several graph kernels defined in literature based on random walks~\cite{Kashima03marginalizedkernels,Mahe2004} ($O(n^3)$ computational complexity), shortest paths~\cite{Kriegel05shortestpath} ($O(n^4)$ computational complexity), subgraphs up to a fixed size~\cite{Shervashidze2009} . The problem with these kernels is the high computational complexity, that makes them inapplicable to several real-world datasets.
+Recently, different almost linear time graph kernels have been defined in literature \cite{Heinonen2009,NIPS2009_0533,Costa2010,Shervashidze2011,Dasan2012,DaSanMartino2016}, and these are the ones we focus o in this paper.
 In the following we will give some details about the considered alternatives.
 \textcolor{red}{TODO}\\
 \begin{itemize}
@@ -348,7 +348,7 @@ NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.0
 % - UNCOMMENT THE NEXT TWO LINES AND REPLACE 'Name_Of_Your_BibFile'
 
 \bibliographystyle{unsrt}
-\bibliography{donini,biblio, Mendeley}
+\bibliography{donini,biblio,Mendeley}
 
 \end{footnotesize}
 
