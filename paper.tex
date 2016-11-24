@@ -169,33 +169,51 @@ Istituto Italiano di Tecnologia, Via Morego 30, Genova, Italy
 
 \section{Introduction}
 In different real-world domains, it may be easy to encode examples in a structured form. For example, in chemoinformatics there is a well known graph representation of the secondary structures of chemical compounds. Moreover, images can easily be represented as graph after segmentation, where adjacent objects (or regions) are linked.
-In these cases, specific machine learning techniques have to be adopted.
-Kernel methods are one option, where it suffices to adopt a kernel function defined for the kind of data under consideration. Then, standard (kernelized) learning algorithms (e.g. SVM) can be adopted.
+In these cases, derive a vectorial representation for the data may be a time-consuming task, where information from  domain experts is needed, and information loss is, in general, unavoidable.
+Another option is to deal directly with examples represented in a structured form.
+In this case, specific machine learning techniques have to be adopted.
+Kernel methods are one option, where it suffices to adopt a kernel function defined for data type under consideration. Then, standard (kernelized) learning algorithms (e.g. SVM) can be adopted.
 
 With kernel methods, a user has usually to deal with a number of hyper-parameters to fix at hand. The optimization of these hyper-parameters can strongly affect the predictive performance of the method.
-Usually, these parameters are: (i) the choice of the kernel to adopt; (ii) the hyper-parameters of the selected kernel; (iii)the hyper-parameters of the learning algorithm.
-A commonly adopted and simple approach to hyper-parameters optimization is to fix a-priori some possible values for each parameter (the combinations of these paraeters are referres to as \textit{parameters grid}).
+Usually, these parameters are: (i) the choice of the kernel to adopt; (ii) the hyper-parameters of the selected kernel; (iii) the hyper-parameters of the learning algorithm.
+A commonly adopted and simple approach to hyper-parameters optimization is to fix a-priori some possible values for each parameter (the combinations of these parameters are referred to as \textit{parameters grid}).
 Then, the learning algorithm is trained for each possible parameters combination, and its performances are evaluated. This approach is commonly referred to as grid-search.
 
-
-The learning algorithm has to be trained for each hyper-parameter combination, and this procedure may be very time consuming.
+With this approach, a learning procedure has to be performed for each hyper-parameter combination, possibly making it very time consuming.
 A possible alleviation to this problem has been proposed in~\cite{Massimo2016}, where Multiple Kernel Learning has been used for combining different kernel matrices in a single learning procedure, instead of selecting the best parameters configuration.
-In the case of kernel algorithms, a different kernel matrix has to be computed for each kernel and for each of their hyper-parameters combination. This step can also be time consuming, especially when dealing with data in a structured form.
-In this paper, we propose a new approach to parameter selection that, based on sub-sampling and Multiple Kernel Learning, is able to speedup the parameter selection phase by orders of manitude on real-world datasets.
+However, in the case of kernel algorithms, a different kernel matrix has to be computed for each kernel and for each of its hyper-parameters values in the grid. This step can also be time consuming, especially when dealing with data in a structured form.
+
+In this paper, we propose a new approach to parameter selection that, based on sub-sampling and Multiple Kernel Learning, is able to speedup the parameter selection phase by orders of magnitude on real-world datasets.
 
 %\section{Kernel for structures and Multiple Kernel Learning}
-\section{Backgroung}
+\section{Background}
+A kernel method is composed by the following two modules.
+A learning algorithm, that expresses the solution only via dot products between training examples.
+A kernel function ${k}: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ that is a symmetric positive semi-definite function that corresponds to a dot product in a Reproducing Kernel Hilbert Space (RKHS), i.e. there exists a $\phi: \mathcal{X} \rightarrow \mathcal{K} \subseteq \mathbb{R}^D$, where $\mathcal{X}$ is the input space and $\mathcal{K}$ is an Hilbert space (commonly referred to as \textit{feature space}), such that $k(X_i,X_j) = \langle \phi(X_i),\phi(X_j) \rangle$ with $X_i,X_j \in \mathcal{X}$.%~\cite{559923}.
 When dealing with structured data, the choice of the kernel to adopt is a key step. Depending on the type of data under consideration, different proposals are available in literature, each one with a different trade-off between predictive performance and computational time (of course, this trade-off depends from the considered task).
+
 In this paper we focus on graphs, i.e. we consider each example to be a different graph.
-In this case, there are several graph kernels defined in literature based on random walks~\cite{Kashima03marginalizedkernels,Mahe2004} ($O(n^3)$ computational complexity), shortest paths~\cite{Kriegel05shortestpath} ($O(n^4)$ computational complexity), subgraphs up to a fixed size~\cite{Shervashidze2009} . The problem with these kernels is the high computational complexity, that makes them inapplicable to several real-world datasets.
-Recently, different almost linear time graph kernels have been defined in literature \cite{Heinonen2009,NIPS2009_0533,Costa2010,Shervashidze2011,Dasan2012,DaSanMartino2016}, and these are the ones we focus o in this paper.
+A graph is a tuple $G=(V_G,E_G,L_G)$, where $V_G=\{v_1,\ldots,v_n\}$ is the set of vertices, $E_G=\{(u,v) | u,v \in V_G\}$ is the set of edges (with $|E_G|=m$), and $L_G: V_G \rightarrow \Sigma$ is a function mapping each vertex to a discrete label in a fixed alphabet $\Sigma$.
+A graph is undirected if $(u,v)\in E_g \Rightarrow (v,u) \in E_G$, otherwise it is directed.
+In this setting, there are several graph kernels defined in literature based on random walks~\cite{Kashima03marginalizedkernels,Mahe2004} ($O(n^3)$ computational complexity), shortest paths~\cite{Kriegel05shortestpath} ($O(n^4)$ computational complexity), subgraphs up to a fixed size $h$~\cite{Shervashidze2009} ($O(n^h)$ complexity). The problem with these kernels is the high computational complexity, that makes them inapplicable to several real-world datasets.
+Recently, different almost linear time graph kernels have been defined in literature \cite{Heinonen2009,NIPS2009_0533,Costa2010,Shervashidze2011,Dasan2012,DaSanMartino2016}, and these are the ones we focus on in this paper.
 In the following we will give some details about the considered alternatives.
-\textcolor{red}{TODO}\\
-\begin{itemize}
- \item WL
- \item NSPDK
- \item ODD$_{ST}$
-\end{itemize}
+Each kernel restricts to specific kinds of subgraphs, up to a certain dimension (that, in general, is a kernel parameter).
+Note that it is out of the scope of this paper to give an extensive comparison among the various graph kernels. 
+
+The Weisfeiler-Lehman Fast Subtree kernel (WL)~\cite{NIPS2009_0533}  counts the number of identical subtree patterns obtained by subtree-walks up to height $h$ in the two input graphs. The complexity of the kernel is $O(|E|h)$. 
+While being fast to compute, the kernel may lack of expressiveness for some tasks given that the number of non-zero features generated by one graph is at most $|V|h$. 
+Note that the subtree-walks extracted by the kernel differ from  subtree structures because a node can appear multiple times in the same subtree-walk.
+
+In~\cite{Costa2010} the Neighborhood Subgraph Pairwise Distance Kernel (NSPDK), an extension of the WL Fast Subtree Kernel, is presented. This kernel computes the exact matches between pairs of subgraphs with controlled size and distance. 
+Their kernel, has $O(|V| |V_h| |E_h| \log |E_h|)$ time complexity, where $|V_h|$ and $|E_h|$ are the number of nodes and the number of edges of the subgraph obtained by a breadth-fist visit of depth $h$. 
+% The complexity of the kernel is $O(|V| |V_h| |E_h| \log |E_h|)$, where $|V_h|$ and $|E_h|$ are the number of nodes and the number of edges of the subgraph obtained by a breadth-fist visit of depth $h$. 
+The authors state that, for small values of the subgraph size and distance, the complexity of the kernel becomes in practice linear.
+
+The Ordered Decomposition DAGs kernel framework (ODD)~\cite{Dasan2012} considers as non-zero features in the RKHS the trees that appear as subtrees of the input graphs (Figure~\ref{fig3:graph}).
+It exploits the shortest-path (up to length $\eta$) DAG decompositions starting from each node in the graph to generate DAG structures, and then extracts tree features from them.
+Each tree-feature is weighted as $f \cdot \lambda^{dim}$, where $f$ is the frequency of the feature, $dim$ its dimension (the number of vertices in the tree) and $\lambda>0$ a weighting parameter.
+The time complexity of the main representative of this family, ODD$_{ST}$, is, under mild conditions, $O(|V_G| \log |V_G|)$, and the number of generated features for a graph is at most $|V_G|\rho^\eta$.
 
 \subsection{Multiple Kernel Learning (MKL)}
 \label{MKL}
