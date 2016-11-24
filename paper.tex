@@ -210,7 +210,7 @@ Their kernel, has $O(|V| |V_h| |E_h| \log |E_h|)$ time complexity, where $|V_h|$
 % The complexity of the kernel is $O(|V| |V_h| |E_h| \log |E_h|)$, where $|V_h|$ and $|E_h|$ are the number of nodes and the number of edges of the subgraph obtained by a breadth-fist visit of depth $h$. 
 The authors state that, for small values of the subgraph size and distance, the complexity of the kernel becomes in practice linear.
 
-The Ordered Decomposition DAGs kernel framework (ODD)~\cite{Dasan2012} considers as non-zero features in the RKHS the trees that appear as subtrees of the input graphs (Figure~\ref{fig3:graph}).
+The Ordered Decomposition DAGs kernel framework (ODD)~\cite{Dasan2012} considers as non-zero features in the RKHS the trees that appear as subtrees of the input graphs.
 It exploits the shortest-path (up to length $\eta$) DAG decompositions starting from each node in the graph to generate DAG structures, and then extracts tree features from them.
 Each tree-feature is weighted as $f \cdot \lambda^{dim}$, where $f$ is the frequency of the feature, $dim$ its dimension (the number of vertices in the tree) and $\lambda>0$ a weighting parameter.
 The time complexity of the main representative of this family, ODD$_{ST}$, is, under mild conditions, $O(|V_G| \log |V_G|)$, and the number of generated features for a graph is at most $|V_G|\rho^\eta$.
@@ -364,7 +364,7 @@ NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.0
 % - UNCOMMENT THE NEXT TWO LINES AND REPLACE 'Name_Of_Your_BibFile'
 
 \bibliographystyle{unsrt}
-\bibliography{donini,biblio}
+\bibliography{donini,biblio,Mendeley}
 
 \end{footnotesize}
 
