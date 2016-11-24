@@ -281,16 +281,17 @@ Then we compute the kernel matrix, on all the available data, for just the top k
 
 
 \section{Experimental Assessment}
-We conducted our experiments on five real-world datasets:
-AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
-CPDB~\cite{Helma2004a}, NCI1~\cite{Wale2006} and GDD~\cite{dobson2003}.
-The first four datasets contain chemical particles encoded in graph form, while the latter encodes proteins.
+We conducted our experiments on five real-world datasets (see \cite{DaSanMartino2016} for a more detailed description).
+%AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
+%CPDB~\cite{Helma2004a}, NCI1~\cite{Wale2006} and GDD~\cite{dobson2003}.
+%The first four datasets contain chemical particles encoded in graph form, while the latter encodes proteins.
 All the nodes are labelled and there are no self loops.
-The AIDS dataset contains 1503 chemical compounds, labelled according to
+The AIDS dataset contains 1503 chemical compounds (encoded in graph form), labelled according to
 their antiviral activity; CAS and CPDB store 4337 and 684 mutagenic
 compounds respectively; NCI1 consists of 4110 chemical compounds screened for activity against 
 non-small lung cancer cells; GDD is composed of 1178 X-ray crystal structures of
 proteins.
+All the datsets represent binary classification problems.
 
 Firstly, we performed some experiments to observe how many samples are required to make $\eta$ and $\eta_s$ similar.
 The metric used for comparison is the jaccard similarity score. Indeed, in our context two weights vectors are similar is they provide the same top kernels.
