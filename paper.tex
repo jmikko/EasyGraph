@@ -83,7 +83,15 @@
 \newcommand{\llambda}{\pmb{\lambda}}
 \newcommand{\mmu}{\pmb{\mu}}
 \newcommand{\pphi}{\pmb{\phi}}
+
 \newcommand{\res}[2]{$#1_{\pm#2}$}
+
+\newcommand{\kval}{$K_{\textsc{val}}$}
+\newcommand{\ksum}{$K_{\textsc{sum}}$}
+\newcommand{\kmkl}{$K_{\textsc{mkl}}$}
+\newcommand{\ksmkl}{$K_{\textsc{mkl}}^{sub}$}
+\newcommand{\kssum}{$K_{\textsc{sum}}^{sub}$}
+\newcommand{\ksw}{$K_{\textsc{w}}^{sub}$}
 
 %***********************************************************************
 % !!!! IMPORTANT NOTICE ON TEXT MARGINS !!!!!
@@ -281,6 +289,11 @@ Then we compute the kernel matrix, on all the available data, for just the top k
 
 
 \section{Experimental Assessment}
+<<<<<<< HEAD
+Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
+In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} show the jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
+From other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
+=======
 We conducted our experiments on five real-world datasets (see \cite{DaSanMartino2016} for a more detailed description).
 %AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
 %CPDB~\cite{Helma2004a}, NCI1~\cite{Wale2006} and GDD~\cite{dobson2003}.
@@ -303,33 +316,27 @@ These experiments are summarized in \figurename\ \ref{fig:weights} and \ref{fig:
 % \caption{The weights vector learned by EasyMKL using $50\%$ and $25\%$ of training data. Blue regions represents the comparison with the weights vector calculated using all data.}
 % \label{fig:weights}
 % \end{figure}
+>>>>>>> 68eb6713e2da1bb7f008a8515d7dfd1964e231aa
 
 \begin{figure}[!htb]
 \centering
-\subfloat[a]{\includegraphics[width=0.42\textwidth]{img/CPDB_jaccard.png}}
-\subfloat[b]{\includegraphics[width=0.42\textwidth]{img/GDD_jaccard.png}}
+\includegraphics[width=0.42\textwidth]{img/CPDB_jaccard.png}
+\includegraphics[width=0.42\textwidth]{img/GDD_jaccard.png}
 \caption{Average jaccard values and standard deviation in 50 runs between the indices of top kernels using a subset of training data and using the whole set.}
 \label{fig:jaccard}
 \end{figure}
 
-In the first step of our method, we learn the weights vector $\eta_{10}$ using a subset $(10\%)$ of training data and the whole set of kernels. To do this, we perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. The hyperparameters are $(\lambda,C)$. Then we fit the model with the best combination and chose the top $10\%$ kernels.\\
-In the latter step we calculate the top kernel matrices and combine it to get the kernel. We propose three methods to perform this combination:
-\begin{itemize}
-\item{}use the EasyMKL algorithm;
-\item{}calculate the average of kernels;
-\item{}use the same weights (rescaled) from the first learning step.
-\end{itemize}
-For testing, we compared our method with 3 hard baselines, that are:
-\begin{itemize}
-\item{}validation: we select the kernel which has the best result in validation;
-\item{}average: we calculate the kernel as the average of all base kernels;
-\item{}combined: we use EasyMKL to combine the whole set of kernels;
-\end{itemize}
-In all models, we use a SVM as base learner, and we select the hyperparameters using a nested 10-fold CV procedure. The hyperparameters are $\lambda\in\{0,0.1,0.2,\dots,1\}-\{0.5\}$ for models where we use EasyMKL and $C\in\{2^i, i:-3\dots6\}$.
-Note that for all baselines we need to calculate all kernel matrices using all of training data.
+The datasets used in our experiments are: [???]\\
+
+To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
+In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
+(1)\ksmkl: use the EasyMKL algorithm, (2)\kssum: calculate the average of kernels, (3)\ksw: use the same weights (rescaled) from the first learning step.\\
+For testing, we compared our method against 3 hard baselines, that are: (a)\kval: the kernel is selected in the nested-cv procedure, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: we use EasyMKL to combine the whole set of kernels.\\
+In all models, we use a SVM as base learner, and we select the hyperparameters using a nested 10-fold CV procedure. The hyperparameters are $\lambda\in\{0,0.1\dots0.4,0.6\dots1\}$ for models where we use EasyMKL and $C\in\{2^i, i:-3\dots6\}$.
+Note that for all baselines we need to calculate all kernel matrices using all of training data.\\
+The kernels used in our experiments are: all NSPDK combinations with $h \in \{0,1\dots9\}$ and $d \in \{0,1\dots9\}$, all ODDST combinations with $h \in \{0,1\dots9\}$ and $\lambda \in \{0.5, 0.7,0.8,0.9,1.0,1.1,1.2,1.4,1.6,1.8\}$, all WL with $h \in \{0,1\dots9\}$.
 
 
-The datasets used in our experiments are: [???]
 
 The results of our experiments are showed in \tablename\ \ref{tab:res}.
 
@@ -339,15 +346,13 @@ The results of our experiments are showed in \tablename\ \ref{tab:res}.
 \caption{My caption}
 \label{tab:res}
 \resizebox{\textwidth}{!}{
-\begin{tabular}{l|c|lll|lll}
+\begin{tabular}{l|c|ccc|ccc}
 \hline
-dataset & \# train & validation      & all (easy) & all (average) & subset\_easy & subset\_aver & subset\_w \\
+dataset & \# train &\kval &\kmkl &\ksum & subset\_easy & subset\_aver & subset\_w \\
 \hline
-CPDB    & 684 &$0.8753_{\pm0.029}$ & $0.8814_{\pm0.027}$ & $0.8809_{\pm0.029}$ & $0.8768_{\pm0.023}$ & $0.8850_{\pm0.027}$ & $0.8751_{\pm0.023}$ \\
-\\
 MUTAG   & 188 & \res{0.9023}{0.075} & \res{0.9310}{0.061} & \res{0.9309}{0.060} & \res{0.9292}{0.054} & \res{0.9292}{0.054} & \res{0.9331}{0.053}    \\
 \\
-CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.11} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
+CPDB    & 684 &$0.8753_{\pm0.029}$ & $0.8814_{\pm0.027}$ & $0.8809_{\pm0.029}$ & $0.8768_{\pm0.023}$ & $0.8850_{\pm0.027}$ & $0.8751_{\pm0.023}$ \\
 \\
 GDD     & 1178 & \res{0.8647}{0.045} & \res{0.8719}{0.039} & \res{0.8675}{0.039} & \res{0.869}{0.041} & \res{0.8713}{0.043} & \res{0.8011}{0.036}    \\
 \\
@@ -356,6 +361,8 @@ AIDS    & 1503 & \res{0.7797}{0.083} & \res{0.7775}{0.080} & \res{0.7712}{0.083}
 NCI1    & 4110 & \res{0.8839}{0.043} & - & \res{0.8851}{0.041} & \res{0.8818}{0.043} & \res{0.8772}{0.047} & \res{0.8811}{0.044}    \\
 \\
 NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.024}  & \res{0.8713}{0.025} & \res{0.8680}{0.022}  \\
+\\
+CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.11} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
 \\
 \hline
 \end{tabular}}
