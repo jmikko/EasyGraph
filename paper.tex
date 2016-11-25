@@ -294,16 +294,14 @@ We conducted our experiments on five real-world datasets (see \cite{DaSanMartino
 %AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
 %CPDB~\cite{Helma2004a}, NCI1~\cite{Wale2006} and GDD~\cite{dobson2003}.
 %The first four datasets contain chemical particles encoded in graph form, while the latter encodes proteins.
-All the nodes are labelled and there are no self loops.
-The AIDS dataset contains 1503 chemical compounds (encoded in graph form), labelled according to
-their antiviral activity; CAS and CPDB store 4337 and 684 mutagenic
-compounds respectively; NCI1 consists of 4110 chemical compounds screened for activity against 
-non-small lung cancer cells; GDD is composed of 1178 X-ray crystal structures of
+All the nodes are labeled and there are no self loops.
+The AIDS dataset contains chemical compounds (encoded in graph form), labeled according to
+their antiviral activity; CAS and CPDB store compounds labeled according to their mutagenicity; NCI1 consists of chemical compounds screened for activity against non-small lung cancer cells; GDD is composed of X-ray crystal structures of
 proteins.
-All the datsets represent binary classification problems.
+All the datasets represent binary classification problems.
 
 Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
-In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} show the jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
+In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} show the Jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
 According to other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
 
 \begin{figure}[!htb]
