@@ -290,11 +290,6 @@ Then we compute the kernel matrix, on all the available data, for just the top k
 
 
 \section{Experimental Assessment}
-<<<<<<< HEAD
-Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
-In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} show the jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
-From other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
-=======
 We conducted our experiments on five real-world datasets (see \cite{DaSanMartino2016} for a more detailed description).
 %AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
 %CPDB~\cite{Helma2004a}, NCI1~\cite{Wale2006} and GDD~\cite{dobson2003}.
@@ -307,16 +302,9 @@ non-small lung cancer cells; GDD is composed of 1178 X-ray crystal structures of
 proteins.
 All the datsets represent binary classification problems.
 
-Firstly, we performed some experiments to observe how many samples are required to make $\eta$ and $\eta_s$ similar.
-The metric used for comparison is the jaccard similarity score. Indeed, in our context two weights vectors are similar is they provide the same top kernels.
-These experiments are summarized in \figurename\ \ref{fig:weights} and \ref{fig:jaccard}.
-
-% \begin{figure}[!htb]
-% \centering
-% \includegraphics[width=\textwidth]{img/weights_GDD.png}
-% \caption{The weights vector learned by EasyMKL using $50\%$ and $25\%$ of training data. Blue regions represents the comparison with the weights vector calculated using all data.}
-% \label{fig:weights}
-% \end{figure}
+Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
+In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} show the jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
+From other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
 
 \begin{figure}[!htb]
 \centering
@@ -325,8 +313,6 @@ These experiments are summarized in \figurename\ \ref{fig:weights} and \ref{fig:
 \caption{Average jaccard values and standard deviation in 50 runs between the indices of top kernels using a subset of training data and using the whole set.}
 \label{fig:jaccard}
 \end{figure}
-
-The datasets used in our experiments are: [???]\\
 
 To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
