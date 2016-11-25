@@ -329,8 +329,6 @@ The results of our experiments are showed in \tablename\ \ref{tab:res}.
 
 \begin{table}[]
 \centering
-\caption{My caption}
-\label{tab:res}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{l|c|ccc|ccc}
 \hline
@@ -348,10 +346,12 @@ NCI1    & 4110 & \res{0.8839}{0.043} & - & \res{0.8851}{0.041} & \res{0.8818}{0.
 &	&	39h	&-	& 7h 24m		& 98h	& 2h 1m	& 2h 1m\\\hline
 NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.024}  & \res{0.8713}{0.025} & \res{0.8680}{0.022}  \\
 &	&	44h	&-	& 7h 36m		& 99h	& 1h 47m	& 1h 47m\\\hline
-CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.11} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
+CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.011} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
 &	&	38h	&-	& 4h 26m		&176h	& 1h 34m		& 1h 34m\\
 \hline
 \end{tabular}}
+\caption{AUC score, standard deviation and computational time for all baselines and all subsampling proposed methods.}
+\label{tab:res}
 \end{table}
 
 \section{Conclusion}
