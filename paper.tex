@@ -268,14 +268,14 @@ where $\YY$ is a diagonal matrix with training labels on the diagonal, and $\Lam
 $
 Note that any element $\boldsymbol{\gamma} \in \Gamma$ corresponds to a pair of points, the first in the convex hull of positive training examples and the second in the convex hull of negative training examples.
 At the solution, the first term of the objective function represents the obtained margin, that is the (squared) distance between a point in the convex hull of positive examples and a point in the convex hull of negative examples, in the compounded feature space.
-
-The objective function in Eq. \ref{eq:easymklotig} can be interpreted as the dual problem of a regularized empirical objective function using the kernel $\sum_{r=1}^R \eta_r \KK_r$. This equation is a minimax problem that can be reduced  to a simple quadratic problem with a technical derivation described  in \cite{Aiolli2015}. %The solution of the quadratic problem is an optimal $\ggamma^*$ for the original min-max formulation. Due to the particular structure of EasyMKL, it is sufficient to provide the average kernel of all the basic kernels ($\KK^A = \frac{1}{R} \sum_{r=1}^R \frac{\KK_r}{Tr(\KK_r)}$). From $\ggamma^*$, it is easy to obtain the optimal weights for the single basic kernels $\KK_r$ by using the following formula
+%The objective function in Eq. \ref{eq:easymklotig} can be interpreted as the dual problem of a regularized empirical objective function using the kernel $\sum_{r=1}^R \eta_r \KK_r$.
+Eq. \ref{eq:easymklotig} is a minimax problem that can be reduced  to a simple quadratic problem with a technical derivation described  in \cite{Aiolli2015}. %The solution of the quadratic problem is an optimal $\ggamma^*$ for the original min-max formulation. Due to the particular structure of EasyMKL, it is sufficient to provide the average kernel of all the basic kernels ($\KK^A = \frac{1}{R} \sum_{r=1}^R \frac{\KK_r}{Tr(\KK_r)}$). From $\ggamma^*$, it is easy to obtain the optimal weights for the single basic kernels $\KK_r$ by using the following formula
 %\begin{equation}
 %\label{eq:easyeta}
 %	\eta_r = \gamma^{*T} \YY \,\, (\KK_r/Tr(\KK_r)) \,\, \YY \gamma^*, \,\,\,\, \forall r=1,\dots,R.
 %\end{equation}
 
-In the following sections, we will refer to this algorithm as EasyMKL\footnote{EasyMKL implementation: github.com/jmikko/EasyMKL}.
+In the following sections, we will refer to this method as EasyMKL\footnote{EasyMKL implementation: github.com/jmikko/EasyMKL}.
 %and we have to provide it only $\KK^A$, the dataset $\XX$ and $\yy$ to evaluate equation \ref{eq:easyeta}, and the EasyMKL regularization hyper-parameter $\Lambda$.
 
 
