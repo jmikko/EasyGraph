@@ -239,8 +239,8 @@ with $\Psi_q = \{ \mmu : \mmu \succcurlyeq 0, \| \mmu \|_q = 1 \}$ and consideri
 Using this formulation, we are studying the family of sums of kernels in the feature space. It is well know that the sum of two kernels can be seen as the concatenation of the features contained in both the RKHS \cite{Shawe-Taylor2004}. Extending the same idea, the weighted sum of a list of basic kernels can be seen as a weighted concatenation of all the features contained in all the RKHS (where the weights are the square roots of the learned weights $\eta_k$).
 
  %structured sparsity regularizers \cite{Micchelli2010,Micchelli2013}.
-The problem of searching for a combinations of basic kernels can be rephrased as a regularization problem in which the prediction function is the sum of functions $f_r$ in the RKHS of kernel $\KK_r$ and the regularization term is the combination of the norms of the $f_r$ in the associated RKHS \cite{Micchelli2005a}. %,Micchelli2007
-For example if $q=1$ this is a parametric version of the group Lasso \cite{Meier2009}, see e.g. \cite{Maurer2012}.
+%The problem of searching for a combinations of basic kernels can be rephrased as a regularization problem in which the prediction function is the sum of functions $f_r$ in the RKHS of kernel $\KK_r$ and the regularization term is the combination of the norms of the $f_r$ in the associated RKHS \cite{Micchelli2005a}. %,Micchelli2007
+%For example if $q=1$ this is a parametric version of the group Lasso \cite{Meier2009}, see e.g. \cite{Maurer2012}.
 
 These algorithms are supported by several theoretical results that bound the \emph{estimation error} (i.e. the difference between the true error and the empirical margin error). These bounds exploit the \emph{Rademacher complexity} applied to the combination of kernels \cite{Maurer2012,Srebro2006,Cortes2009c}%,Hussain2011,Hussain2011a}. %,Kakade2009,Micchelli2005,Kloft2012
 
@@ -290,11 +290,6 @@ Then we compute the kernel matrix, on all the available data, for just the top k
 
 
 \section{Experimental Assessment}
-<<<<<<< HEAD
-Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
-In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} show the jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
-From other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
-=======
 We conducted our experiments on five real-world datasets (see \cite{DaSanMartino2016} for a more detailed description).
 %AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
 %CPDB~\cite{Helma2004a}, NCI1~\cite{Wale2006} and GDD~\cite{dobson2003}.
@@ -307,16 +302,9 @@ non-small lung cancer cells; GDD is composed of 1178 X-ray crystal structures of
 proteins.
 All the datsets represent binary classification problems.
 
-Firstly, we performed some experiments to observe how many samples are required to make $\eta$ and $\eta_s$ similar.
-The metric used for comparison is the jaccard similarity score. Indeed, in our context two weights vectors are similar is they provide the same top kernels.
-These experiments are summarized in \figurename\ \ref{fig:weights} and \ref{fig:jaccard}.
-
-% \begin{figure}[!htb]
-% \centering
-% \includegraphics[width=\textwidth]{img/weights_GDD.png}
-% \caption{The weights vector learned by EasyMKL using $50\%$ and $25\%$ of training data. Blue regions represents the comparison with the weights vector calculated using all data.}
-% \label{fig:weights}
-% \end{figure}
+Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
+In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} show the jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
+According to other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
 
 \begin{figure}[!htb]
 \centering
@@ -326,14 +314,12 @@ These experiments are summarized in \figurename\ \ref{fig:weights} and \ref{fig:
 \label{fig:jaccard}
 \end{figure}
 
-The datasets used in our experiments are: [???]\\
-
 To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
-(1)\ksmkl: use the EasyMKL algorithm, (2)\kssum: calculate the average of kernels, (3)\ksw: use the same weights (rescaled) from the first learning step.\\
-For testing, we compared our method against 3 hard baselines, that are: (a)\kval: the kernel is selected in the nested-cv procedure, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: we use EasyMKL to combine the whole set of kernels.\\
-In all models, we use a SVM as base learner, and we select the hyperparameters using a nested 10-fold CV procedure. The hyperparameters are $\lambda\in\{0,0.1\dots0.4,0.6\dots1\}$ for models where we use EasyMKL and $C\in\{2^i, i:-3\dots6\}$.
-Note that for all baselines we need to calculate all kernel matrices using all of training data.\\
+(1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.\\
+For testing, we compared our method against 3 hard baselines, that are: (a)\kval: the kernel is selected in the nested-cv procedure, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: we use EasyMKL to combine the whole set of kernels.
+In all models, we use a SVM as base learner, and we select the hyperparameters using a nested 10-fold CV procedure. The hyperparameters are $\lambda\in\{0,0.1\dots0.4,0.6\dots1\}$ for models where we use EasyMKL, and $C\in\{2^i, i:-3\dots6\}$.
+Note that for all baselines we need to calculate all kernel matrices using all of training data directly.\\
 The kernels used in our experiments are: all NSPDK combinations with $h \in \{0,1\dots9\}$ and $d \in \{0,1\dots9\}$, all ODDST combinations with $h \in \{0,1\dots9\}$ and $\lambda \in \{0.5, 0.7,0.8,0.9,1.0,1.1,1.2,1.4,1.6,1.8\}$, all WL with $h \in \{0,1\dots9\}$.
 
 
@@ -343,22 +329,29 @@ The results of our experiments are showed in \tablename\ \ref{tab:res}.
 
 \begin{table}[]
 \centering
-\caption{My caption}
-\label{tab:res}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{l|c|ccc|ccc}
 \hline
-dataset & \# train &\kval &\kmkl &\ksum & subset\_easy & subset\_aver & subset\_w \\
+dataset & \# train &\kval &\kmkl &\ksum & \ksmkl & \kssum & \ksw \\
 \hline
 MUTAG   & 188 & \res{0.9023}{0.075} & \res{0.9310}{0.061} & \res{0.9309}{0.060} & \res{0.9292}{0.054} & \res{0.9292}{0.054} & \res{0.9331}{0.053}    \\
+&			  & 18m					& 40m				& 8m		& 3m		&4m		&4m\\\hline
 CPDB    & 684 &$0.8753_{\pm0.029}$ & $0.8814_{\pm0.027}$ & $0.8809_{\pm0.029}$ & $0.8768_{\pm0.023}$ & $0.8850_{\pm0.027}$ & $0.8751_{\pm0.023}$ \\
-GDD     & 1178 & \res{0.8647}{0.045} & \res{0.8719}{0.039} & \res{0.8675}{0.039} & \res{0.869}{0.041} & \res{0.8713}{0.043} & \res{0.8011}{0.036}    \\
+&			  & 1h 16m				& 8h 33m		& 20m	& 1h 37m		& 5m		&5m\\\hline
+GDD     & 1178 & \res{0.8647}{0.045} & \res{0.8719}{0.039} & \res{0.8675}{0.039} & \res{0.8690}{0.041} & \res{0.8713}{0.043} & \res{0.8011}{0.036}    \\
+&			& +24h	& +24h	& +24h	&3h		& 4h 15m		& 4h 15m\\\hline
 AIDS    & 1503 & \res{0.7797}{0.083} & \res{0.7775}{0.080} & \res{0.7712}{0.083} & \res{0.7845}{0.077} & \res{0.7690}{0.074} & \res{0.7673}{0.073}    \\
+&		& 6h 39m		& 50h	& 2h 44m		& 11h 10m	& 1h 4m	& 1h 4m\\\hline
 NCI1    & 4110 & \res{0.8839}{0.043} & - & \res{0.8851}{0.041} & \res{0.8818}{0.043} & \res{0.8772}{0.047} & \res{0.8811}{0.044}    \\
+&	&	39h	&-	& 7h 24m		& 98h	& 2h 1m	& 2h 1m\\\hline
 NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.024}  & \res{0.8713}{0.025} & \res{0.8680}{0.022}  \\
-CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.11} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
+&	&	44h	&-	& 7h 36m		& 99h	& 1h 47m	& 1h 47m\\\hline
+CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.011} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
+&	&	38h	&-	& 4h 26m		&176h	& 1h 34m		& 1h 34m\\
 \hline
 \end{tabular}}
+\caption{AUC score, standard deviation and computational time for all baselines and all subsampling proposed methods.}
+\label{tab:res}
 \end{table}
 
 \section{Conclusion}
