@@ -304,7 +304,7 @@ All the datsets represent binary classification problems.
 
 Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
 In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} show the jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
-From other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
+According to other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
 
 \begin{figure}[!htb]
 \centering
@@ -316,10 +316,10 @@ From other preliminary results, we fix the dimension of subset used in the first
 
 To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
-(1)\ksmkl: use the EasyMKL algorithm, (2)\kssum: calculate the average of kernels, (3)\ksw: use the same weights (rescaled) from the first learning step.\\
-For testing, we compared our method against 3 hard baselines, that are: (a)\kval: the kernel is selected in the nested-cv procedure, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: we use EasyMKL to combine the whole set of kernels.\\
-In all models, we use a SVM as base learner, and we select the hyperparameters using a nested 10-fold CV procedure. The hyperparameters are $\lambda\in\{0,0.1\dots0.4,0.6\dots1\}$ for models where we use EasyMKL and $C\in\{2^i, i:-3\dots6\}$.
-Note that for all baselines we need to calculate all kernel matrices using all of training data.\\
+(1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.\\
+For testing, we compared our method against 3 hard baselines, that are: (a)\kval: the kernel is selected in the nested-cv procedure, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: we use EasyMKL to combine the whole set of kernels.
+In all models, we use a SVM as base learner, and we select the hyperparameters using a nested 10-fold CV procedure. The hyperparameters are $\lambda\in\{0,0.1\dots0.4,0.6\dots1\}$ for models where we use EasyMKL, and $C\in\{2^i, i:-3\dots6\}$.
+Note that for all baselines we need to calculate all kernel matrices using all of training data directly.\\
 The kernels used in our experiments are: all NSPDK combinations with $h \in \{0,1\dots9\}$ and $d \in \{0,1\dots9\}$, all ODDST combinations with $h \in \{0,1\dots9\}$ and $\lambda \in \{0.5, 0.7,0.8,0.9,1.0,1.1,1.2,1.4,1.6,1.8\}$, all WL with $h \in \{0,1\dots9\}$.
 
 
