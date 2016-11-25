@@ -242,11 +242,12 @@ Using this formulation, we are studying the family of sums of kernels in the fea
 The problem of searching for a combinations of basic kernels can be rephrased as a regularization problem in which the prediction function is the sum of functions $f_r$ in the RKHS of kernel $\KK_r$ and the regularization term is the combination of the norms of the $f_r$ in the associated RKHS \cite{Micchelli2005a}. %,Micchelli2007
 For example if $q=1$ this is a parametric version of the group Lasso \cite{Meier2009}, see e.g. \cite{Maurer2012}.
 
-These algorithms are supported by several theoretical results that bound the \emph{estimation error} (i.e. the difference between the true error and the empirical margin error). These bounds exploit the \emph{Rademacher complexity} applied to the combination of kernels \cite{Maurer2012,Srebro2006,Cortes2009c,Hussain2011,Hussain2011a}. %,Kakade2009,Micchelli2005,Kloft2012
+These algorithms are supported by several theoretical results that bound the \emph{estimation error} (i.e. the difference between the true error and the empirical margin error). These bounds exploit the \emph{Rademacher complexity} applied to the combination of kernels \cite{Maurer2012,Srebro2006,Cortes2009c}%,Hussain2011,Hussain2011a}. %,Kakade2009,Micchelli2005,Kloft2012
 
-Existing MKL approaches can be divided in two main categories. In the first category, \emph{Fixed or Heuristic}, some fixed rule is applied to obtain the combination. They usually get results scalable with respect to the number of kernels combined but their effectiveness critically depends on the domain at hand. They use a parameterized combination function and find the parameters of this function generally by looking at some measure obtained from each kernel separately,  often giving a suboptimal solution (since no information sharing among the kernels is exploited).
+Existing MKL approaches can be divided in two main categories. In the first category, \emph{Fixed or Heuristic}, some fixed rule is applied to obtain the combination. They usually get results scalable with respect to the number of kernels combined but their effectiveness critically depends on the domain at hand. %They use a parameterized combination function and find the parameters of this function generally by looking at some measure obtained from each kernel separately,  often giving a suboptimal solution (since no information sharing among the kernels is exploited).
 
-On the other hand, the \emph{Optimization based} approaches learn the combination parameters by solving a single optimization problem directly integrated in the learning machine (e.g. structural risk based target function) or formulated as a different model (e.g. alignment, or other kernel similarity maximization) \cite{Rakotomamonjy2008,Bach2004,Varma2009}. %,Kloft2011,SorenSonnenburg2006,Vishwanathan2010,Xu2010
+On the other hand, the \emph{Optimization based} approaches learn the combination parameters by solving a single optimization problem directly integrated in the learning machine %(e.g. structural risk based target function)
+or formulated as a different model (e.g. alignment, or other kernel similarity maximization) \cite{Rakotomamonjy2008,Bach2004,Varma2009}. %,Kloft2011,SorenSonnenburg2006,Vishwanathan2010,Xu2010
 
 %*** good refs. [F. R. Bach, R. Jenatton, J. Mairal, and G. Obozinski. Optimization with sparsity-inducing penalties. Foundations and Trends in Machine Learning, 4:1?106, 2011.] \cite{Bach2012} ***
 
@@ -267,11 +268,11 @@ $
 Note that any element $\boldsymbol{\gamma} \in \Gamma$ corresponds to a pair of points, the first in the convex hull of positive training examples and the second in the convex hull of negative training examples.
 At the solution, the first term of the objective function represents the obtained margin, that is the (squared) distance between a point in the convex hull of positive examples and a point in the convex hull of negative examples, in the compounded feature space.
 
-The objective function in Eq. \ref{eq:easymklotig} can be interpreted as the dual problem of a regularized empirical objective function using the kernel $\sum_{r=1}^R \eta_r \KK_r$. This equation is a minimax problem that can be reduced  to a simple quadratic problem with a technical derivation described  in \cite{Aiolli2015}. The solution of the quadratic problem is an optimal $\ggamma^*$ for the original min-max formulation. Due to the particular structure of EasyMKL, it is sufficient to provide the average kernel of all the basic kernels ($\KK^A = \frac{1}{R} \sum_{r=1}^R \frac{\KK_r}{Tr(\KK_r)}$). From $\ggamma^*$, it is easy to obtain the optimal weights for the single basic kernels $\KK_r$ by using the following formula
-\begin{equation}
-\label{eq:easyeta}
-	\eta_r = \gamma^{*T} \YY \,\, (\KK_r/Tr(\KK_r)) \,\, \YY \gamma^*, \,\,\,\, \forall r=1,\dots,R.
-\end{equation}
+The objective function in Eq. \ref{eq:easymklotig} can be interpreted as the dual problem of a regularized empirical objective function using the kernel $\sum_{r=1}^R \eta_r \KK_r$. This equation is a minimax problem that can be reduced  to a simple quadratic problem with a technical derivation described  in \cite{Aiolli2015}. %The solution of the quadratic problem is an optimal $\ggamma^*$ for the original min-max formulation. Due to the particular structure of EasyMKL, it is sufficient to provide the average kernel of all the basic kernels ($\KK^A = \frac{1}{R} \sum_{r=1}^R \frac{\KK_r}{Tr(\KK_r)}$). From $\ggamma^*$, it is easy to obtain the optimal weights for the single basic kernels $\KK_r$ by using the following formula
+%\begin{equation}
+%\label{eq:easyeta}
+%	\eta_r = \gamma^{*T} \YY \,\, (\KK_r/Tr(\KK_r)) \,\, \YY \gamma^*, \,\,\,\, \forall r=1,\dots,R.
+%\end{equation}
 
 In the following sections, we will refer to this algorithm as EasyMKL\footnote{EasyMKL implementation: github.com/jmikko/EasyMKL}.
 %and we have to provide it only $\KK^A$, the dataset $\XX$ and $\yy$ to evaluate equation \ref{eq:easyeta}, and the EasyMKL regularization hyper-parameter $\Lambda$.
@@ -316,7 +317,6 @@ These experiments are summarized in \figurename\ \ref{fig:weights} and \ref{fig:
 % \caption{The weights vector learned by EasyMKL using $50\%$ and $25\%$ of training data. Blue regions represents the comparison with the weights vector calculated using all data.}
 % \label{fig:weights}
 % \end{figure}
->>>>>>> 68eb6713e2da1bb7f008a8515d7dfd1964e231aa
 
 \begin{figure}[!htb]
 \centering
@@ -351,19 +351,12 @@ The results of our experiments are showed in \tablename\ \ref{tab:res}.
 dataset & \# train &\kval &\kmkl &\ksum & subset\_easy & subset\_aver & subset\_w \\
 \hline
 MUTAG   & 188 & \res{0.9023}{0.075} & \res{0.9310}{0.061} & \res{0.9309}{0.060} & \res{0.9292}{0.054} & \res{0.9292}{0.054} & \res{0.9331}{0.053}    \\
-\\
 CPDB    & 684 &$0.8753_{\pm0.029}$ & $0.8814_{\pm0.027}$ & $0.8809_{\pm0.029}$ & $0.8768_{\pm0.023}$ & $0.8850_{\pm0.027}$ & $0.8751_{\pm0.023}$ \\
-\\
 GDD     & 1178 & \res{0.8647}{0.045} & \res{0.8719}{0.039} & \res{0.8675}{0.039} & \res{0.869}{0.041} & \res{0.8713}{0.043} & \res{0.8011}{0.036}    \\
-\\
 AIDS    & 1503 & \res{0.7797}{0.083} & \res{0.7775}{0.080} & \res{0.7712}{0.083} & \res{0.7845}{0.077} & \res{0.7690}{0.074} & \res{0.7673}{0.073}    \\
-\\
 NCI1    & 4110 & \res{0.8839}{0.043} & - & \res{0.8851}{0.041} & \res{0.8818}{0.043} & \res{0.8772}{0.047} & \res{0.8811}{0.044}    \\
-\\
 NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.024}  & \res{0.8713}{0.025} & \res{0.8680}{0.022}  \\
-\\
 CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.11} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
-\\
 \hline
 \end{tabular}}
 \end{table}
