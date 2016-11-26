@@ -129,7 +129,7 @@
 \begin{document}
 %style file for ESANN manuscripts
 %primo tentativo
-\title{Fast Hyper-Parameter Selection for Graph Kernels via Subsampling and Multiple Kernel Learning}
+\title{Fast Hyper-Parameter Selection for Graph Kernels via Subsampling and\\Multiple Kernel Learning}
 
 %***********************************************************************
 % AUTHORS INFORMATION AREA
@@ -173,7 +173,7 @@ via Trieste 63, Padova, Italy
 %\renewcommand{\baselinestretch}{.95}
 
 \begin{abstract}
-...
+Kernel for structures are generally characterized by a number of hyper-parameter which need to be tuned. Moreover, different types of kernels can be used and the best choice usually depends on data. The hyper-parameter setting is a time-consuming step. One option proposed to overcome this problem is to use the Multiple Kernel Learning approach and generate a kernel which is a combination of different types of kernels and different hyper-parameters settings. However, this solution still requires the computation of many large kernel matrices. In this paper we propose a subsampling method to efficiently select a small number of kernels which need to be actually computed. Finally, we give empirical evidence that the method proposed is far more efficient than the other approaches while maintaining similar results in terms of AUC.
 \end{abstract}
 
 
@@ -291,18 +291,21 @@ Then we compute the kernel matrix, on all the available data, for just the top k
 
 
 \section{Experimental Assessment}
-We conducted our experiments on five real-world datasets (see \cite{DaSanMartino2016} for a more detailed description).
+We conducted our experiments on several real-world binary datasets (see \cite{DaSanMartino2016} for a more detailed description).
 %AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
 %CPDB~\cite{Helma2004a}, NCI1~\cite{Wale2006} and GDD~\cite{dobson2003}.
 %The first four datasets contain chemical particles encoded in graph form, while the latter encodes proteins.
-All the nodes are labeled and there are no self loops.
 The AIDS dataset contains chemical compounds (encoded in graph form), labeled according to
-their antiviral activity; CAS and CPDB store compounds labeled according to their mutagenicity; NCI1 and NCI109 consist of chemical compounds screened for activity against non-small lung cancer cells; GDD is composed of X-ray crystal structures of
-proteins.
-All the datasets represent binary classification problems.
+their antiviral activity; CAS and CPDB store compounds labeled according to their mutagenicity; NCI1 and NCI109 consist of chemical compounds screened for activity against non-small lung cancer cells; GDD is composed of X-ray crystal structures of proteins; MUTAG contains %MUTAG serve per far vedere che funziona bene anche su dataset piccolissimi
+[...].
+All the nodes are labeled and there are no self loops.
+
+The kernels used in our experiments are: all NSPDK combinations with $h \in \{0,1\dots9\}$ and $d \in \{0,1\dots9\}$, all ODDST combinations with $h \in \{0,1\dots9\}$ and $\lambda \in \{0.5, 0.7,0.8,0.9,1.0,1.1,1.2,1.4,1.6,1.8\}$, all WL with $h \in \{0,1\dots9\}$.
+%These are always calculated for all of our baselines, 
+The baselines consist on a SVM with kernels (a)\kval: the kernel is the one which has the best validation score, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: the kernel is a combination of all base kernels using EasyMKL.
 
 Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
-In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} show the Jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
+In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} shows the Jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
 According to other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
 
 \begin{figure}[!htb]
@@ -316,11 +319,8 @@ According to other preliminary results, we fix the dimension of subset used in t
 To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
 (1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.\\
-For testing, we compared our method against 3 hard baselines, that are: (a)\kval: the kernel is selected in the nested-cv procedure, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: we use EasyMKL to combine the whole set of kernels.
 In all models, we use a SVM as base learner, and we select the hyperparameters using a nested 10-fold CV procedure. The hyperparameters are $\Lambda\in\{0,0.1\dots0.4,0.6\dots1\}$ for models where we use EasyMKL, and $C\in\{2^i, i:-3\dots6\}$.
 Note that for all baselines we need to calculate all kernel matrices using all of training data directly.\\
-The kernels used in our experiments are: all NSPDK combinations with $h \in \{0,1\dots9\}$ and $d \in \{0,1\dots9\}$, all ODDST combinations with $h \in \{0,1\dots9\}$ and $\lambda \in \{0.5, 0.7,0.8,0.9,1.0,1.1,1.2,1.4,1.6,1.8\}$, all WL with $h \in \{0,1\dots9\}$.
-
 
 
 The results of our experiments are showed in \tablename\ \ref{tab:res}.
@@ -330,7 +330,7 @@ The results of our experiments are showed in \tablename\ \ref{tab:res}.
 \centering
 \resizebox{\textwidth}{!}{
 \begin{tabular}{l|c|ccc|ccc}
-\hline
+\hline\hline
 dataset & \# train &\kval &\kmkl &\ksum & \ksmkl & \kssum & \ksw \\
 \hline
 MUTAG   & 188 & \res{0.9023}{0.075} & \res{0.9310}{0.061} & \res{0.9309}{0.060} & \res{0.9292}{0.054} & \res{0.9292}{0.054} & \res{0.9331}{0.053}    \\
@@ -347,7 +347,7 @@ NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.0
 &	&	44h	&-	& 7h 36m		& 99h	& 1h 47m	& 1h 47m\\\hline
 CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.011} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
 &	&	38h	&-	& 4h 26m		&176h	& 1h 34m		& 1h 34m\\
-\hline
+\hline\hline
 \end{tabular}}
 \caption{AUC score, standard deviation and computational time for all baselines and all subsampling proposed methods.}
 \label{tab:res}
