@@ -187,8 +187,9 @@ fine tuned.  Multiple Kernel Learning offers a way to approach this
 computational bottleneck by generating a combination of different kernels
 under different parametric settings. However, this solution still requires the
 computation of many large kernel matrices. In this paper we propose a method
-to efficiently select just a small number of kernels without loss in
-predictive performance.
+to efficiently select a small number of kernels on a subset of the original
+data, gaining a dramatic reduction in the runtime without a significant loss
+of predictive performance.
 
 \end{abstract}
 
@@ -202,14 +203,14 @@ segmentation pre-processing step, images can also be represented as networks
 of adjacent objects or regions. Working on these domains employing traditional
 feature engineering is possible, but it is generally time-consuming (every
 different application requires a novel feature design by some expert) and
-information loss is often unavoidable. Direct processing of structures is
-possible using a kernelized approach, where a kernel function can be devised
-for each generic data type (for example sequences, trees or graphs). This in
-turn allows to use standard learning algorithms (e.g. SVM) to solve the
-predictive task.
+information loss is often unavoidable. Instead, a direct processing of
+structures can be obtained using kernelized approaches, where a kernel
+function can be devised for each generic data type (for example sequences,
+trees or graphs). This in turn allows to use standard learning algorithms
+(e.g. SVM) to solve the desired predictive tasks.
 
-Model selection is one of the most computationally expensive tasks in a
-machine learning application. When dealing with kernel methods for structures,
+Model selection is one of the most computationally expensive tasks in
+machine learning applications. When dealing with kernel methods for structures,
 the choice with the largest impact on the overall performance is the selection
 of the feature bias, i.e. the choice of the concrete kernel for structures.
 Each kernel in turn exposes several hyper-parameters which also need to be
@@ -391,10 +392,21 @@ CAS     & 4337 & \res{0.9189}{0.012} & - & \res{\tb{0.9209}}{0.012} & \res{0.919
 \label{tab:res}
 \end{table}
 
-\section{Discussion and conclusion}
-In the context of MKL, we showed a procedure to learn the kernels combination vector using a subset of training data, and use this vector to chose the top kernels for a given problem. Then we propose three methods to combine top kernels quickly, preserving an high AUC score.
-As showed in the results table, the percentage of subsampling and top kernels selected (10\%) is a good compromise between time complexity and high AUC score. Furthermore, due to the low number of selected top kernels, we can assume that all of them are good kernels for our problem, so we can combine them effectively using the simple summation, avoiding to use the EasyMKL algorithms in the second learning step.\\
-Finally, our method is able to reduce effectively the time complexity, making the MKL approach usable for huge datasets.
+\section{Discussion and conclusion} 
+
+We have presented an efficient approach to model selection for graph kernels
+based on the multiple kernel learning framework. We have shown how working on
+small subsets (up to 10\%) of the data yields results that are stable and
+accurate enough to select the optimal combination of kernels via EasyMKL.
+We have investigated three methods to efficiently combine a subset of
+kernels while preserving at the same time an high AUC score for the downstream
+machine learning algorithms. Finally, we showed how we can use the simple
+summation of the selected kernels, avoiding the expensive step of running MKL
+on the full training set, to scale the MKL approach to very large
+datasets.
+
+In future work we will extend the library of graph kernels to obtain a
+comprehensive and easy to use software package.  
 
 % ****************************************************************************
 % BIBLIOGRAPHY AREA
