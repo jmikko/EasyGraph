@@ -92,6 +92,7 @@
 \newcommand{\ksmkl}{$K_{\textsc{mkl}}^{sub}$}
 \newcommand{\kssum}{$K_{\textsc{sum}}^{sub}$}
 \newcommand{\ksw}{$K_{\textsc{w}}^{sub}$}
+\newcommand{\tb}[1]{\boldsymbol{#1}}
 
 
 \renewcommand{\baselinestretch}{.96}
@@ -333,20 +334,20 @@ In all of these methods we use a SVM as base learner. The hyperparameters sets a
 \hline\hline
 dataset & \# train &\kval &\kmkl &\ksum & \ksmkl & \kssum & \ksw \\
 \hline
-MUTAG   & 188 & \res{0.9023}{0.075} & \res{0.9310}{0.061} & \res{0.9309}{0.060} & \res{0.9292}{0.054} & \res{0.9292}{0.054} & \res{0.9331}{0.053}    \\
+MUTAG   & 188 & \res{0.9023}{0.075} & \res{0.9310}{0.061} & \res{0.9309}{0.060} & \res{0.9292}{0.054} & \res{0.9292}{0.054} & \res{\tb{0.9331}}{0.053}    \\
 &			  & 18m					& 40m				& 8m		& 3m		&4m		&4m\\\hline
-CPDB    & 684 &$0.8753_{\pm0.029}$ & $0.8814_{\pm0.027}$ & $0.8809_{\pm0.029}$ & $0.8768_{\pm0.023}$ & $0.8850_{\pm0.027}$ & $0.8751_{\pm0.023}$ \\
+CPDB    & 684 &$0.8753_{\pm0.029}$ & $0.8814_{\pm0.027}$ & $0.8809_{\pm0.029}$ & $0.8768_{\pm0.023}$ & $\tb{0.8850}_{\pm0.027}$ & $0.8751_{\pm0.023}$ \\
 &			  & 1h 16m				& 8h 33m		& 20m	& 1h 37m		& 5m		&5m\\\hline
-GDD     & 1178 & \res{0.8647}{0.045} & \res{0.8719}{0.039} & \res{0.8675}{0.039} & \res{0.8690}{0.041} & \res{0.8713}{0.043} & \res{0.8011}{0.036}    \\
-&			& $>$48h	& $>$48h	& $>$48h	&3h		& 4h 15m		& 4h 15m\\\hline
-AIDS    & 1503 & \res{0.7797}{0.083} & \res{0.7775}{0.080} & \res{0.7712}{0.083} & \res{0.7845}{0.077} & \res{0.7690}{0.074} & \res{0.7673}{0.073}    \\
+GDD     & 1178 & \res{0.8647}{0.045} & \res{\tb{0.8719}}{0.039} & \res{0.8675}{0.039} & \res{0.8690}{0.041} & \res{0.8713}{0.043} & \res{0.8011}{0.036}    \\
+&			& $>$100h	& $>$100h	& $>$100h	&3h		& 4h 15m		& 4h 15m\\\hline
+AIDS    & 1503 & \res{0.7797}{0.083} & \res{0.7775}{0.080} & \res{0.7712}{0.083} & \res{\tb{0.7845}}{0.077} & \res{0.7690}{0.074} & \res{0.7673}{0.073}    \\
 &		& 6h 39m		& 50h	& 2h 44m		& 11h 10m	& 1h 4m	& 1h 4m\\\hline
-NCI1    & 4110 & \res{0.8839}{0.043} & - & \res{0.8851}{0.041} & \res{0.8818}{0.043} & \res{0.8772}{0.047} & \res{0.8811}{0.044}    \\
+NCI1    & 4110 & \res{0.8839}{0.043} & - & \res{\tb{0.8851}}{0.041} & \res{0.8818}{0.043} & \res{0.8772}{0.047} & \res{0.8811}{0.044}    \\
 &	&	39h	&-	& 7h 24m		& 98h	& 2h 1m	& 2h 1m\\\hline
-NCI109 & 4127 & \res{0.8728}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.024}  & \res{0.8713}{0.025} & \res{0.8680}{0.022}  \\
+NCI109 & 4127 & \res{\tb{0.8728}}{0.025} & - & \res{0.8713}{0.025} & \res{0.8670}{0.024}  & \res{0.8713}{0.025} & \res{0.8680}{0.022}  \\
 &	&	44h	&-	& 7h 36m		& 99h	& 1h 47m	& 1h 47m\\\hline
-CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.011} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
-&	&	38h	&-	& 4h 26m		&176h	& 1h 34m		& 1h 34m\\
+CAS     & 4337 & \res{0.9189}{0.012} & - & \res{\tb{0.9209}}{0.012} & \res{0.9195}{0.011} & \res{0.9161}{0.012} & \res{0.9185}{0.012}    \\
+&	&	38h	&-	& 4h 26m		&$>$100h	& 1h 34m		& 1h 34m\\	%176h
 \hline\hline
 \end{tabular}}
 \caption{AUC score, standard deviation and computational time for all baselines and all subsampling proposed methods.}
@@ -355,7 +356,8 @@ CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.
 
 \section{Conclusion}
 In the context of MKL, we showed a procedure to learn the kernels combination vector using a subset of training data, and use this vector to chose the top kernels for a given problem. Then we propose 3 methods to combine top kernels quickly, preserving an high AUC score.
-[...]
+As showed in the results table, the percentage of subsampling and top kernels selected (10\%) is a good compromise between time complexity and high AUC score. Furthermore, due to low percentage, we can assume that all top kernels are good kernels for our problem, so we can combine them effectively using the simple summation, avoiding to use the EasyMKL algorithms in the second learning step.\\
+Finally, our method is able to reduce effectively the time complexity, making the MKL approach usable for huge datasets.
 
 % ****************************************************************************
 % BIBLIOGRAPHY AREA
