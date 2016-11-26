@@ -291,22 +291,25 @@ Then we compute the kernel matrix, on all the available data, for just the top k
 
 
 \section{Experimental Assessment}
-We conducted our experiments on several real-world binary datasets (see \cite{DaSanMartino2016} for a more detailed description).
+We conducted our experiments on several real-world binary datasets, that are MUTAG, CPDB, GDD, AIDS, NCI1, NCI109, CAS (see \cite{DaSanMartino2016} for a more detailed description).
 %AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
 %CPDB~\cite{Helma2004a}, NCI1~\cite{Wale2006} and GDD~\cite{dobson2003}.
 %The first four datasets contain chemical particles encoded in graph form, while the latter encodes proteins.
-The AIDS dataset contains chemical compounds (encoded in graph form), labeled according to
+{\color{red} The AIDS dataset contains chemical compounds (encoded in graph form), labeled according to
 their antiviral activity; CAS and CPDB store compounds labeled according to their mutagenicity; NCI1 and NCI109 consist of chemical compounds screened for activity against non-small lung cancer cells; GDD is composed of X-ray crystal structures of proteins; MUTAG contains %MUTAG serve per far vedere che funziona bene anche su dataset piccolissimi
 [...].
-All the nodes are labeled and there are no self loops.
+All the nodes are labeled and there are no self loops.}
 
 The kernels used in our experiments are: all NSPDK combinations with $h \in \{0,1\dots9\}$ and $d \in \{0,1\dots9\}$, all ODDST combinations with $h \in \{0,1\dots9\}$ and $\lambda \in \{0.5, 0.7,0.8,0.9,1.0,1.1,1.2,1.4,1.6,1.8\}$, all WL with $h \in \{0,1\dots9\}$.
-%These are always calculated for all of our baselines, 
-The baselines consist on a SVM with kernels (a)\kval: the kernel is the one which has the best validation score, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: the kernel is a combination of all base kernels using EasyMKL.
+In all models, we considered kernels calculated in less that 1 hour, rejecting others.
+The baselines used to compare our method consist on a SVM with kernels (a)\kval: the kernel is the one which has the best validation score, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: the kernel is a combination of all base kernels using EasyMKL.
+For each baseline, the computation of all kernels is required.
+The hyperparameters are chosen using a nested 10-fold CV procedure, and they are $C\in\{2^i, i:-3\dots6\}$, and $\Lambda\in\{0,0.1\dots0.4,0.6\dots1\}$ for \kmkl.
+
 
 Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
 In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} shows the Jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
-According to other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%.
+According to other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%. Except for MUTAG, where we use 20\% of training data.
 
 \begin{figure}[!htb]
 \centering
@@ -318,12 +321,9 @@ According to other preliminary results, we fix the dimension of subset used in t
 
 To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
-(1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.\\
-In all models, we use a SVM as base learner, and we select the hyperparameters using a nested 10-fold CV procedure. The hyperparameters are $\Lambda\in\{0,0.1\dots0.4,0.6\dots1\}$ for models where we use EasyMKL, and $C\in\{2^i, i:-3\dots6\}$.
-Note that for all baselines we need to calculate all kernel matrices using all of training data directly.\\
-
-
-The results of our experiments are showed in \tablename\ \ref{tab:res}.
+(1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.
+In all of these methods we use a SVM as base learner. The hyperparameters sets are the same used in baselines.\\
+\tablename\ \ref{tab:res} shows the AUC score, standard deviation and computation time used to make kernels and models for all problems.
 
 
 \begin{table}[]
@@ -338,7 +338,7 @@ MUTAG   & 188 & \res{0.9023}{0.075} & \res{0.9310}{0.061} & \res{0.9309}{0.060} 
 CPDB    & 684 &$0.8753_{\pm0.029}$ & $0.8814_{\pm0.027}$ & $0.8809_{\pm0.029}$ & $0.8768_{\pm0.023}$ & $0.8850_{\pm0.027}$ & $0.8751_{\pm0.023}$ \\
 &			  & 1h 16m				& 8h 33m		& 20m	& 1h 37m		& 5m		&5m\\\hline
 GDD     & 1178 & \res{0.8647}{0.045} & \res{0.8719}{0.039} & \res{0.8675}{0.039} & \res{0.8690}{0.041} & \res{0.8713}{0.043} & \res{0.8011}{0.036}    \\
-&			& +24h	& +24h	& +24h	&3h		& 4h 15m		& 4h 15m\\\hline
+&			& $>$24h	& $>$24h	& $>$24h	&3h		& 4h 15m		& 4h 15m\\\hline
 AIDS    & 1503 & \res{0.7797}{0.083} & \res{0.7775}{0.080} & \res{0.7712}{0.083} & \res{0.7845}{0.077} & \res{0.7690}{0.074} & \res{0.7673}{0.073}    \\
 &		& 6h 39m		& 50h	& 2h 44m		& 11h 10m	& 1h 4m	& 1h 4m\\\hline
 NCI1    & 4110 & \res{0.8839}{0.043} & - & \res{0.8851}{0.041} & \res{0.8818}{0.043} & \res{0.8772}{0.047} & \res{0.8811}{0.044}    \\
@@ -354,7 +354,8 @@ CAS     & 4337 & \res{0.9189}{0.012} & - & \res{0.9209}{0.012} & \res{0.9195}{0.
 \end{table}
 
 \section{Conclusion}
-...
+In the context of MKL, we showed a procedure to learn the kernels combination vector using a subset of training data, and use this vector to chose the top kernels for a given problem. Then we propose 3 methods to combine top kernels quickly, preserving an high AUC score.
+[...]
 
 % ****************************************************************************
 % BIBLIOGRAPHY AREA
