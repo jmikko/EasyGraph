@@ -133,7 +133,7 @@
 \begin{document}
 %style file for ESANN manuscripts
 %primo tentativo
-\title{Fast Hyper-Parameter Selection for Graph Kernels via Subsampling and\\Multiple Kernel Learning}
+\title{Fast Hyperparameter Selection for Graph Kernels via Subsampling and\\Multiple Kernel Learning}
 
 %***********************************************************************
 % AUTHORS INFORMATION AREA
@@ -177,7 +177,7 @@ via Trieste 63, Padova, Italy
 %\renewcommand{\baselinestretch}{.95}
 
 \begin{abstract}
-Kernels for structures are generally characterised by a number of hyper-parameters which need to be tuned. Moreover, different types of kernels can be used and the best choice usually depends on data. The hyper-parameter setting is a time-consuming step. One option proposed to overcome this problem is to use the Multiple Kernel Learning approach and generate a kernel which is a combination of different types of kernels and different hyper-parameters settings. However, this solution still requires the computation of many large kernel matrices. In this paper we propose a subsampling method to efficiently select just a small number of kernels which need to be actually computed. Finally, we give empirical evidence that the method proposed is far more efficient than the other approaches while maintaining similar results in terms of AUC.
+Kernels for structures are generally characterised by a number of hyperparameters which need to be tuned. Moreover, different types of kernels can be used and the best choice usually depends on data. The hyperparameter setting is a time-consuming step. One option proposed to overcome this problem is to use the Multiple Kernel Learning approach and generate a kernel which is a combination of different types of kernels and different hyperparameters settings. However, this solution still requires the computation of many large kernel matrices. In this paper we propose a subsampling method to efficiently select just a small number of kernels which need to be actually computed. Finally, we give empirical evidence that the method proposed is far more efficient than the other approaches while maintaining similar results in terms of AUC.
 \end{abstract}
 
 
@@ -188,14 +188,14 @@ Another option is to deal directly with examples represented in a structured for
 In this case, specific machine learning techniques have to be adopted.
 Kernel methods are one option, where it suffices to adopt a kernel function defined for data type under consideration. Then, standard (kernelized) learning algorithms (e.g. SVM) can be adopted.
 
-With kernel methods, a user has usually to deal with several of hyper-parameters to fix manually. The optimization of these hyper-parameters can strongly affect the predictive performance of the method.
-Usually, these parameters are: (i) the choice of the kernel to adopt; (ii) the hyper-parameters of the selected kernel; (iii) the hyper-parameters of the learning algorithm.
-A commonly adopted and simple approach to hyper-parameters optimization is to fix a-priori some possible values for each parameter (the combinations of these parameters are referred to as \textit{parameters grid}).
+With kernel methods, a user has usually to deal with several of hyperparameters to fix manually. The optimization of these hyperparameters can strongly affect the predictive performance of the method.
+Usually, these parameters are: (i) the choice of the kernel to adopt; (ii) the hyperparameters of the selected kernel; (iii) the hyperparameters of the learning algorithm.
+A commonly adopted and simple approach to hyperparameters optimization is to fix a-priori some possible values for each parameter (the combinations of these parameters are referred to as \textit{parameters grid}).
 Then, the learning algorithm is trained for each possible parameters combination, and its performances are evaluated. This approach is commonly referred to as grid-search.
 
-With this approach, a learning procedure has to be performed for each hyper-parameter combination, possibly making it very time consuming.
+With this approach, a learning procedure has to be performed for each hyperparameter combination, possibly making it very time consuming.
 A possible alleviation to this problem has been proposed in~\cite{FabioAiolliMicheleDonini2015,Massimo2016}, where Multiple Kernel Learning (MKL) has been used for combining different kernel matrices in a single learning procedure, instead of selecting the best parameters configuration.
-However, in the case of kernel algorithms, a different kernel matrix has to be computed for each kernel and for each of its hyper-parameters values in the grid. This step can also be time consuming, especially when dealing with data in a structured form.
+However, in the case of kernel algorithms, a different kernel matrix has to be computed for each kernel and for each of its hyperparameters values in the grid. This step can also be time consuming, especially when dealing with data in a structured form.
 
 In this paper, we propose a new approach to parameter selection that, based on sub-sampling and MKL, is able to speedup the parameter selection phase by orders of magnitude on real-world datasets.
 
@@ -216,7 +216,7 @@ In this paper we focus on graphs, i.e. we consider each example to be a differen
 %A graph is undirected if $(u,v)\in E_g \Rightarrow (v,u) \in E_G$, otherwise it is directed.
 In this setting, there are several graph kernels defined in literature based on random walks~\cite{Kashima03marginalizedkernels,Mahe2004},
 %($O(n^3)$ computational complexity)
-shortest paths~\cite{Kriegel05shortestpath},
+shortest paths~\cite{Kriegel05shortestpath}, or
  %($O(n^4)$ computational complexity),
  subgraphs up to a fixed size $h$~\cite{Shervashidze2009}.
  % ($O(n^h)$ complexity). 
@@ -226,18 +226,18 @@ Recently, different almost linear time graph kernels have been defined in litera
 Each one of these kernels considers only specific kinds of subgraphs, up to a certain dimension (that, in general, is a kernel parameter).
 Note that it is out of the scope of this paper to give an extensive comparison among the various graph kernels. 
 
-The Weisfeiler-Lehman Fast Subtree kernel (WL)~\cite{Shervashidze2011}  counts the number of identical subtree patterns obtained by subtree-walks up to height $h$ (an hyper-parameter) in the two input graphs. %The complexity of the kernel is $O(|E|h)$. 
+The Weisfeiler-Lehman Fast Subtree kernel (WL)~\cite{Shervashidze2011}  counts the number of identical subtree patterns obtained by subtree-walks up to height $h$ (an hyperparameter) in the two input graphs. %The complexity of the kernel is $O(|E|h)$. 
 %While being fast to compute, the kernel may lack of expressiveness for some tasks given that the number of non-zero features generated by one graph is at most $|V|h$. 
 Note that the subtree-walks extracted by the kernel differ from  subtree structures because a node can appear multiple times in the same subtree-walk.
 
-In~\cite{Costa2010} the Neighborhood Subgraph Pairwise Distance Kernel (NSPDK) is presented. This kernel computes the exact matches between pairs of subgraphs with controlled size and distance (hyper-parameters $r$ and $d$, respectively). 
+In~\cite{Costa2010} the Neighborhood Subgraph Pairwise Distance Kernel (NSPDK) is presented. This kernel computes the exact matches between pairs of subgraphs with controlled size and distance (hyperparameters $r$ and $d$, respectively). 
 %The kernel has $O(|V| |V_h| |E_h| \log |E_h|)$ time complexity, where $|V_h|$ and $|E_h|$ are the number of nodes and the number of edges of the subgraph obtained by a breadth-fist visit of depth $h$. 
 % The complexity of the kernel is $O(|V| |V_h| |E_h| \log |E_h|)$, where $|V_h|$ and $|E_h|$ are the number of nodes and the number of edges of the subgraph obtained by a breadth-fist visit of depth $h$. 
 %The authors state that, for small values of the subgraph size and distance, the complexity of the kernel becomes in practice linear.
 
 The Ordered Decomposition DAGs Subtree kernel (ODD$_{ST}$)~\cite{DaSanMartino2016} considers as non-zero features in the RKHS the trees that appear as subtrees of the input graphs.
-It exploits the shortest-path (up to length $h$, a hyper-parameter) DAG decompositions starting from each node in the graph to generate DAG structures, and then extracts tree features from them.
-Each tree-feature is weighted as $f \cdot \lambda^{dim}$, where $f$ is the frequency of the feature, $dim$ its dimension (the number of vertices in the tree) and $\lambda>0$ a weighting hyper-parameter.
+It exploits the shortest-path (up to length $h$, a hyperparameter) DAG decompositions starting from each node in the graph to generate DAG structures, and then extracts tree features from them.
+Each tree-feature is weighted as $f \cdot \lambda^{dim}$, where $f$ is the frequency of the feature, $dim$ its dimension (the number of vertices in the tree) and $\lambda>0$ a weighting hyperparameter.
 %The time complexity of the kernel is, under mild conditions, $O(|V_G| \log |V_G|)$.%, and the number of generated features for a graph is at most $|V_G|\rho^\eta$.
 
 \subsection{Multiple Kernel Learning}
@@ -274,7 +274,7 @@ EasyMKL finds the coefficients $\boldsymbol{\eta}$ that maximize the margin on t
 \max_{\boldsymbol{\eta}:||\boldsymbol{\eta}||_2=1} \min_{\boldsymbol{\gamma} \in \Gamma} \mbox { }  \boldsymbol{\gamma}^{\top} \YY ( \sum_{r=0}^R \eta_r \KK_r) \YY \boldsymbol{\gamma} + \Lambda ||\boldsymbol{\gamma}||^2,
 \end{equation}
 %\vspace{-0.1cm}
-where $\YY$ is a diagonal matrix with training labels on the diagonal, and $\Lambda$ is a regularization hyper-parameter. The domain $\Gamma$ represents two probability distributions over the set of positive and negative examples of the training set, that is $\Gamma = \{\boldsymbol{\gamma} \in \Real_+^{\ell} \hspace{0.2cm} |  \sum_{y_i = +1} \boldsymbol{\gamma}_i = 1 , \sum_{y_i = -1} \boldsymbol{\gamma}_i = 1\}.
+where $\YY$ is a diagonal matrix with training labels on the diagonal, and $\Lambda$ is a regularization hyperparameter. The domain $\Gamma$ represents two probability distributions over the set of positive and negative examples of the training set, that is $\Gamma = \{\boldsymbol{\gamma} \in \Real_+^{\ell} \hspace{0.2cm} |  \sum_{y_i = +1} \boldsymbol{\gamma}_i = 1 , \sum_{y_i = -1} \boldsymbol{\gamma}_i = 1\}.
 $
 Note that any element $\boldsymbol{\gamma} \in \Gamma$ corresponds to a pair of points, the first in the convex hull of positive training examples and the second in the convex hull of negative training examples.
 At the solution, the first term of the objective function represents the obtained margin, that is the (squared) distance between a point in the convex hull of positive examples and a point in the convex hull of negative examples, in the compounded feature space.
@@ -285,7 +285,7 @@ Eq. \ref{eq:easymklotig} is a minimax problem that can be reduced  to a simple q
 %	\eta_r = \gamma^{*T} \YY \,\, (\KK_r/Tr(\KK_r)) \,\, \YY \gamma^*, \,\,\,\, \forall r=1,\dots,R.
 %\end{equation}
 In the following sections, we will refer to this method as EasyMKL\footnote{EasyMKL implementation: github.com/jmikko/EasyMKL}.
-%and we have to provide it only $\KK^A$, the dataset $\XX$ and $\yy$ to evaluate equation \ref{eq:easyeta}, and the EasyMKL regularization hyper-parameter $\Lambda$.
+%and we have to provide it only $\KK^A$, the dataset $\XX$ and $\yy$ to evaluate equation \ref{eq:easyeta}, and the EasyMKL regularization hyperparameter $\Lambda$.
 
 
 \section{Proposed framework}
@@ -316,8 +316,8 @@ The hyperparameters are chosen using a nested 10-fold CV procedure, and they are
 
 
 Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
-In our context two weights vectors are similar if they provide the same top kernels. By the way the metric used for comparison is the jaccard similarity score. \figurename\ \ref{fig:jaccard} shows the Jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
-According to other preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%. Except for MUTAG, where we use 20\% of training data.
+In our context two weights vectors are similar if they provide the same top kernels. The metric used for comparison is the Jaccard similarity score. \figurename\ \ref{fig:jaccard} shows the Jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
+According to preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%, except for MUTAG (the smallest datasets), where we use 20\% of training data.
 
 \begin{figure}[!htb]
 \centering
@@ -362,8 +362,8 @@ CAS     & 4337 & \res{0.9189}{0.012} & - & \res{\tb{0.9209}}{0.012} & \res{0.919
 \end{table}
 
 \section{Discussion and conclusion}
-In the context of MKL, we showed a procedure to learn the kernels combination vector using a subset of training data, and use this vector to chose the top kernels for a given problem. Then we propose 3 methods to combine top kernels quickly, preserving an high AUC score.
-As showed in the results table, the percentage of subsampling and top kernels selected (10\%) is a good compromise between time complexity and high AUC score. Furthermore, due to low percentage, we can assume that all top kernels are good kernels for our problem, so we can combine them effectively using the simple summation, avoiding to use the EasyMKL algorithms in the second learning step.\\
+In the context of MKL, we showed a procedure to learn the kernels combination vector using a subset of training data, and use this vector to chose the top kernels for a given problem. Then we propose three methods to combine top kernels quickly, preserving an high AUC score.
+As showed in the results table, the percentage of subsampling and top kernels selected (10\%) is a good compromise between time complexity and high AUC score. Furthermore, due to the low number of selected top kernels, we can assume that all of them are good kernels for our problem, so we can combine them effectively using the simple summation, avoiding to use the EasyMKL algorithms in the second learning step.\\
 Finally, our method is able to reduce effectively the time complexity, making the MKL approach usable for huge datasets.
 
 % ****************************************************************************
