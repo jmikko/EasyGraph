@@ -301,7 +301,7 @@ EasyMKL finds the coefficients $\boldsymbol{\eta}$ that maximize the margin on t
 \vspace{-0.4cm}
 \begin{equation}
 \label{eq:easymklotig}
-\max_{\boldsymbol{\eta}:||\boldsymbol{\eta}||_2=1} \min_{\boldsymbol{\gamma} \in \Gamma} \mbox { }  \boldsymbol{\gamma}^{\top} \YY ( \sum_{r=0}^R \eta_r \KK_r) \YY \boldsymbol{\gamma} + \Lambda ||\boldsymbol{\gamma}||^2,
+\max_{\boldsymbol{\eta}:||\boldsymbol{\eta}||_2=1} \min_{\boldsymbol{\gamma} \in \Gamma} \mbox { }  \boldsymbol{\gamma}^{\top} \YY \left( \sum_{r=0}^R \eta_r \KK_r\right) \YY \boldsymbol{\gamma} + \Lambda ||\boldsymbol{\gamma}||^2_2,
 \end{equation}
 %\vspace{-0.1cm}
 where $\YY$ is a diagonal matrix with training labels on the diagonal, and $\Lambda$ is a regularization hyperparameter. The domain $\Gamma$ represents two probability distributions over the set of positive and negative examples of the training set, that is $\Gamma = \{\boldsymbol{\gamma} \in \Real_+^{\ell} \hspace{0.2cm} |  \sum_{y_i = +1} \boldsymbol{\gamma}_i = 1 , \sum_{y_i = -1} \boldsymbol{\gamma}_i = 1\}.
