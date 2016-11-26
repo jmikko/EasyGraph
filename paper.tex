@@ -139,7 +139,7 @@
 % AUTHORS INFORMATION AREA
 %***********************************************************************
 %\author{First author$^1$ and Second author$^2$
-\author{Michele Domini$^1$, Nicol\`o Navarin$^2$, Ivano Lauriola$^2$, Fabio Aiolli$^2$ and Fabrizio Costa$^3$
+\author{Michele Donini$^1$, Nicol\`o Navarin$^2$, Ivano Lauriola$^2$, Fabio Aiolli$^2$ and Fabrizio Costa$^3$
 %
 % Optional short acknowledgment: remove next line if non-needed
 %\thanks{This is an optional funding source acknowledgement.}
@@ -361,7 +361,7 @@ CAS     & 4337 & \res{0.9189}{0.012} & - & \res{\tb{0.9209}}{0.012} & \res{0.919
 \label{tab:res}
 \end{table}
 
-\section{Conclusion}
+\section{Discussion and conclusion}
 In the context of MKL, we showed a procedure to learn the kernels combination vector using a subset of training data, and use this vector to chose the top kernels for a given problem. Then we propose 3 methods to combine top kernels quickly, preserving an high AUC score.
 As showed in the results table, the percentage of subsampling and top kernels selected (10\%) is a good compromise between time complexity and high AUC score. Furthermore, due to low percentage, we can assume that all top kernels are good kernels for our problem, so we can combine them effectively using the simple summation, avoiding to use the EasyMKL algorithms in the second learning step.\\
 Finally, our method is able to reduce effectively the time complexity, making the MKL approach usable for huge datasets.
