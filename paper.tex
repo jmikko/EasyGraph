@@ -179,12 +179,12 @@ Kernel for structures are generally characterized by a number of hyper-parameter
 
 \section{Introduction}
 In different real-world domains, it may be easy to encode examples in a structured form. For example, in chemoinformatics there is a well known graph representation of the secondary structures of chemical compounds. Moreover, images can easily be represented as graph after segmentation, where adjacent objects (or regions) are linked.
-In these cases, derive a vectorial representation for the data may be a time-consuming task, where information from  domain experts is needed, and information loss is, in general, unavoidable.
+In these cases, deriving a vectorial representation for the data may be a time-consuming task, where information from  domain experts is needed, and information loss is, in general, unavoidable.
 Another option is to deal directly with examples represented in a structured form.
 In this case, specific machine learning techniques have to be adopted.
 Kernel methods are one option, where it suffices to adopt a kernel function defined for data type under consideration. Then, standard (kernelized) learning algorithms (e.g. SVM) can be adopted.
 
-With kernel methods, a user has usually to deal with a number of hyper-parameters to fix at hand. The optimization of these hyper-parameters can strongly affect the predictive performance of the method.
+With kernel methods, a user has usually to deal with several of hyper-parameters to fix manually. The optimization of these hyper-parameters can strongly affect the predictive performance of the method.
 Usually, these parameters are: (i) the choice of the kernel to adopt; (ii) the hyper-parameters of the selected kernel; (iii) the hyper-parameters of the learning algorithm.
 A commonly adopted and simple approach to hyper-parameters optimization is to fix a-priori some possible values for each parameter (the combinations of these parameters are referred to as \textit{parameters grid}).
 Then, the learning algorithm is trained for each possible parameters combination, and its performances are evaluated. This approach is commonly referred to as grid-search.
