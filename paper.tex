@@ -34,6 +34,30 @@
 %\usepackage{babel,blindtext}
 \usepackage{color}
 
+\usepackage{color}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\usepackage{listings}
+\lstset{
+	language=Python,
+	basicstyle=\footnotesize,
+	commentstyle=\color{mygreen},
+	frame=single,
+	keepspaces=true,
+	keywordstyle=\color{blue},
+	morekeywords={*,...},
+	escapeinside={(*}{*)}, 
+	numbers=left,
+	numbersep=5pt,
+	numberstyle=\tiny\color{mygray}, 
+	rulecolor=\color{black},
+	title=Proposed algorithm	
+}
+
+
 % My commands
 \newcommand{\Real}{\mathbb{R}}
 \newcommand{\Natu}{\mathbb{N}}
@@ -55,6 +79,7 @@
 \newcommand{\HH}{{\bf H}}
 \newcommand{\II}{{\bf I}}
 \newcommand{\XX}{{\bf X}}
+\newcommand{\XXs}{{\XX_\textsc{s}}}
 %\newcommand{\NN}{{\bf N}}
 \newcommand{\cU}{{\cal U}}
 \newcommand{\cI}{{\cal I}}
@@ -328,6 +353,15 @@ Then we compute the kernel matrix, on all the available data, for just the top k
 
 %In summary, in the first phase we choose the top kernels using a subset of the available data. In the second phase, we calculate the top kernel matrices using the whole set of data, and then we use them in combination.
 
+
+\begin{lstlisting}
+Input: training matrix (*$\XX$*), list of kernel functions (*$L$*)
+(*$\XXs$*) (*$\leftarrow$*) subset_of((*$\XX$*))
+(*$KL_\textsc{s}$*) (*$\leftarrow$*) [ker_fun((*$\XXs$*)) for ker_fun in (*$L$*)] #calculate matrices on (*$\XXs$*)
+(*$\boldsymbol{\eta}$*) (*$\leftarrow$*) EasyMKL((*$KL_\textsc{s}$*)) #calculate weights
+(*$L_{\textsc{top}}$*) (*$\leftarrow$*) top_of((*$L,\boldsymbol{\eta}$*)) #get the top functions
+(*$KL$*) (*$\leftarrow$*) [ker_fun((*$\XX$*)) for ker_fun in (*$L_{\textsc{top}}$*)] #calculate top matrices on (*$\XX$*)
+\end{lstlisting}
 
 \section{Experimental Assessment}
 We conducted our experiments on several real-world binary datasets, that are MUTAG, CPDB, GDD, AIDS, NCI1, NCI109, CAS (see \cite{DaSanMartino2016,Shervashidze2011} for a more detailed description).
