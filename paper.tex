@@ -306,7 +306,7 @@ Using this formulation, we are studying the family of sums of kernels in the fea
  %structured sparsity regularizers \cite{Micchelli2010,Micchelli2013}.
 %The problem of searching for a combinations of basic kernels can be rephrased as a regularization problem in which the prediction function is the sum of functions $f_r$ in the RKHS of kernel $\KK_r$ and the regularization term is the combination of the norms of the $f_r$ in the associated RKHS \cite{Micchelli2005a}. %,Micchelli2007
 %For example if $q=1$ this is a parametric version of the group Lasso \cite{Meier2009}, see e.g. \cite{Maurer2012}.
-
+%
 These algorithms are supported by several theoretical results that bound the \emph{estimation error} (i.e. the difference between the true error and the empirical margin error). These bounds exploit the \emph{Rademacher complexity} applied to the combination of kernels \cite{Maurer2012,Cortes2009c}.%,Hussain2011,Hussain2011a}. %,Kakade2009,Micchelli2005,Kloft2012,Srebro2006,
 
 %Existing MKL approaches can be divided in two main categories. In the first category, \emph{Fixed or Heuristic}, some fixed rule is applied to obtain the combination. They usually get results scalable with respect to the number of kernels combined but their effectiveness critically depends on the domain at hand. %They use a parameterized combination function and find the parameters of this function generally by looking at some measure obtained from each kernel separately,  often giving a suboptimal solution (since no information sharing among the kernels is exploited).
@@ -341,27 +341,30 @@ In the following sections, we will refer to this method as EasyMKL\footnote{Easy
 
 
 \section{Proposed framework}
-Often, to work well MKL algorithms require an high number of kernels, and when we use structured data as input, such as graphs, the computational effort to calculate each of them can be high. Moreover each kernel requires an amount of memory that depends on the number of samples, making the MKL approach unpractical when the number of samples and the number of kernels are huge.
-In order to avoid these problems, we propose a method to reduce the number of kernels to compute on the complete dataset, based on the robustness of the combination vector $\boldsymbol{\eta}$ when considering just a subset of the available data.\\
-In particular if the combination vector learned using the whole set of data and all kernel functions $\boldsymbol{\eta}$ is similar to the weights vector $\hat{\boldsymbol{\eta}}$ learned using the same kernels calculated on a subset of data, we can compute just $\hat{\boldsymbol{\eta}}$ .
+%Often, to work well MKL algorithms require an high number of kernels, and when we use structured data as input, such as graphs, the computational effort to calculate each of them can be high. Moreover each kernel requires an amount of memory that depends on the number of samples, making the MKL approach unpractical when the number of samples and the number of kernels are huge.
+%In order to avoid these problems, 
+We propose a method to reduce the number of kernels to compute on the complete dataset.
+%, based on the robustness of the combination vector $\boldsymbol{\eta}$ when considering just a subset of the available data.
+We argue that the combination vector learned by EasyMKL on just a subset of the available data ($\hat{\boldsymbol{\eta}}$) is similar to the one obtained by the same algorithm on the whole dataset ($\boldsymbol{\eta}$). See Fig.~\ref{fig:jaccard} for an experimental assessment of this assumption.
+%In particular if the combination vector learned using the whole set of data and all kernel functions $\boldsymbol{\eta}$ is similar to the weights vector $\hat{\boldsymbol{\eta}}$ learned using the same kernels calculated on a subset of data, we can compute just $\hat{\boldsymbol{\eta}}$ .
 %In this way we can learn quickly the kernels combination, but we have to calculate all kernels anyway.
-Moreover, we can use the values in $\hat{\boldsymbol{\eta}}$ to perform a ranking over kernels, removing those below a (user-specified) threshold.
+We use the values in $\hat{\boldsymbol{\eta}}$ to perform a ranking over kernels, removing those below a (user-specified) threshold.
 Then we compute the kernel matrix, on all the available data, for just the top kernels, and fit a model combining them.
-
+%
 %In summary, in the first phase we choose the top kernels using a subset of the available data. In the second phase, we calculate the top kernel matrices using the whole set of data, and then we use them in combination.
-
-
+A sketch of the proposed algorithm is given in the following.
+%
 \begin{lstlisting}
-Input: examples (*$Tr$*), list of kernel functions (*$L$*),
+Input: examples (*$Tr$*), list of kernel functions (*$L$*), 
 kernel percentage (*$p_K$*), example percentage (*$p_S$*) 
 Output: a list of Gram matrices on (*$Tr$*)
 (*$S$*) (*$\leftarrow$*) random_subset_of((*$Tr, p_S$*))
 (*$K_\textsc{s}$*) (*$\leftarrow$*) [Gram(*$(S,k)$*) for k in (*$L$*)] #Gram matrices on (*$Tr_s$*)
-(*$\boldsymbol{\eta}$*) (*$\leftarrow$*) EasyMKL((*$K_\textsc{s}$*)) #weights of the functions in (*$L$*)
-(*$L_{\textsc{top}}$*) (*$\leftarrow$*) top_of((*$L,\boldsymbol{\eta}, p_K$*)) #get the top functions
+(*$\hat{\boldsymbol{\eta}}$*) (*$\leftarrow$*) EasyMKL((*$K_\textsc{s}$*)) #weights of the functions in (*$L$*)
+(*$L_{\textsc{top}}$*) (*$\leftarrow$*) top_of((*$L,\hat{\boldsymbol{\eta}}, p_K$*)) #get the top functions
 Return [Gram((*$Tr,k$*)) for k in (*$L_{\textsc{top}}$*)] #top Gram matrices on (*$Tr$*)
 \end{lstlisting}
-
+In the algorithm, we adopted Python's list comprehension notation. We used the following functions:  $random\_subset\_of(tr,p_S)$  samples a percentage $p_S$ of the examples in the set $Tr$; $Gram(S,k)$ computes the \textit{Gram} matrix of the kernel $k$ on the set of examples $Tr$; \textit{EasyMKL($K_s$)} computes a list of weights (one for each kernel in $K_s$) according to the EasyMKL algorithm; $top_of(L,\hat{\boldsymbol{\eta}},p_K)$ extracts the top $p_K$ percentage of the elements in $L$ according to the weights $\hat{\boldsymbol{\eta}}$.
 \section{Experimental Assessment}
 We conducted our experiments on several real-world binary datasets, that are MUTAG, CPDB, GDD, AIDS, NCI1, NCI109, CAS (see \cite{DaSanMartino2016,Shervashidze2011} for a more detailed description).
 %AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
@@ -381,15 +384,16 @@ The hyper-parameters are chosen using a nested 10-fold CV procedure, and they ar
 Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
 In our context two weights vectors are similar if they provide the same top kernels. The metric used for comparison is the Jaccard similarity score. \figurename\ \ref{fig:jaccard} shows the Jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
 According to preliminary results, we fix the dimension of subset used in the first step to learn $\hat{\boldsymbol{\eta}}$ as 10\% and the number of top kernels as 10\%, except for MUTAG (the smallest datasets), where we use 20\% of training data.
-
-\begin{figure}[!htb]
+%
+%\begin{figure}[!htb]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.42\textwidth]{img/CPDBh.png}
 \includegraphics[width=0.42\textwidth]{img/GDDh.png}
 \caption{Average jaccard values and standard deviation in 50 runs between the indices of top kernels using a subset of training data and using the whole set.}
 \label{fig:jaccard}
 \end{figure}
-
+%
 To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
 (1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.
@@ -464,7 +468,6 @@ comprehensive and easy to use software package.
 % ****************************************************************************
 
 \end{document}
-
 
 
 
