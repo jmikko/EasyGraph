@@ -352,12 +352,14 @@ Then we compute the kernel matrix, on all the available data, for just the top k
 
 
 \begin{lstlisting}
-Input: training matrix (*$\XX$*), list of kernel functions (*$L$*)
-(*$\XXs$*) (*$\leftarrow$*) subset_of((*$\XX$*))
-(*$K_\textsc{s}$*) (*$\leftarrow$*) [ker_funct((*$\XXs$*)) for ker_funct in (*$L$*)] #matrices on (*$\XXs$*)
-(*$\boldsymbol{\eta}$*) (*$\leftarrow$*) EasyMKL((*$K_\textsc{s}$*)) #weights of the functions in L
-(*$L_{\textsc{top}}$*) (*$\leftarrow$*) top_of((*$L,\boldsymbol{\eta}$*)) #get the top functions
-(*$KL$*) (*$\leftarrow$*) [ker_funct((*$\XX$*)) for ker_fun in (*$L_{\textsc{top}}$*)] #top matrices on (*$\XX$*)
+Input: examples (*$Tr$*), list of kernel functions (*$L$*),
+kernel percentage (*$K_p$*), example percentage (*$S_p$*) 
+Output: 
+(*$S$*) (*$\leftarrow$*) random_subset_of((*$Tr, S_p$*))
+(*$K_\textsc{s}$*) (*$\leftarrow$*) [Gram(*$(S,k)$*) for k in (*$L$*)] #Gram matrices on (*$Tr_s$*)
+(*$\boldsymbol{\eta}$*) (*$\leftarrow$*) EasyMKL((*$K_\textsc{s}$*)) #weights of the functions in (*$L$*)
+(*$L_{\textsc{top}}$*) (*$\leftarrow$*) top_of((*$L,\boldsymbol{\eta}, K_p$*)) #get the top functions
+Return [Gram((*$Tr,k$*)) for k in (*$L_{\textsc{top}}$*)] #top Gram matrices on (*$Tr$*)
 \end{lstlisting}
 
 \section{Experimental Assessment}
