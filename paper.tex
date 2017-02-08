@@ -368,6 +368,7 @@ Output: a list of Gram matrices on (*$Tr$*)
 Return [Gram((*$Tr,k$*)) for k in (*$L_{\textsc{top}}$*)] #top Gram matrices on (*$Tr$*)
 \end{lstlisting}
 In the algorithm, we adopted Python's list comprehension notation. We used the following functions:  $random\_subset\_of(Tr,p_S)$  samples a percentage $p_S$ of the examples in the set $Tr$; $Gram(Tr,k)$ computes the \textit{Gram} matrix of the kernel $k$ on the set of examples $Tr$; \textit{EasyMKL($K_s$)} computes a list of weights (one for each kernel in $K_s$) according to the EasyMKL algorithm; $top\_of(L,\hat{\boldsymbol{\eta}},p_K)$ extracts the top $p_K$ percentage of the elements in $L$ according to the weights $\hat{\boldsymbol{\eta}}$.
+\vspace{-0.5cm}
 \section{Experimental Assessment}
 We conducted our experiments on several real-world binary datasets, that are MUTAG, CPDB, GDD, AIDS, NCI1, NCI109, CAS (see \cite{DaSanMartino2016,Shervashidze2011} for a more detailed description).
 %AIDS~\cite{Weislow1989a}, CAS\footnote{http://cheminformatics.org/datasets/bursi/},
@@ -400,9 +401,9 @@ According to preliminary results, we fix the dimension of subset used in the fir
 To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
 (1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.
-In all of these methods we use a SVM as base learner. The hyper-parameters sets are the same used in baselines.\\
-Our experiments are performed using an Intel(R) Xeon(R) CPU E5-2680 2.70GHz, 256GB (RAM).
-\tablename\ \ref{tab:res} shows the AUC score, standard deviation and computation time used to make kernels and models for all problems.
+In all of these methods we use a SVM as base learner. The hyper-parameters sets are the same used in baselines.
+\tablename\ \ref{tab:res} shows the AUC score, standard deviation and computation time.\footnote{We used an Intel(R) Xeon(R) CPU E5-2680 2.70GHz, 256GB (RAM).}
+ used to make kernels and models for all problems.
 %
 %\begin{table}[]
 %\centering
@@ -460,6 +461,7 @@ CAS     & 4337 & \res{0.92}{0.01} & - & \res{0.92}{0.01} & \res{0.92}{0.01} & \r
 \label{tab:res}
 \end{table}
 %
+\vspace{-0.15cm}
 \section{Discussion and conclusion} 
 %
 We have presented an efficient approach to model selection for graph kernels
@@ -479,6 +481,7 @@ comprehensive and easy to use software package.
 % BIBLIOGRAPHY AREA
 % ****************************************************************************
 %
+\vspace{-0.2cm}
 \begin{footnotesize}
 %
 % IF YOU DO NOT USE BIBTEX, USE THE FOLLOWING SAMPLE SCHEME FOR THE REFERENCES
