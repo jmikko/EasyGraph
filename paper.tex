@@ -400,7 +400,8 @@ According to preliminary results, we fix the dimension of subset used in the fir
 To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
 (1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.
-In all of these methods we use a SVM as base learner. The hyper-parameters sets are the same used in baselines.
+In all of these methods we use a SVM as base learner. The hyper-parameters sets are the same used in baselines.\\
+Our experiments are performed using an Intel(R) Xeon(R) CPU E5-2680 2.70GHz, 256GB (RAM).
 \tablename\ \ref{tab:res} shows the AUC score, standard deviation and computation time used to make kernels and models for all problems.
 %
 %\begin{table}[]
