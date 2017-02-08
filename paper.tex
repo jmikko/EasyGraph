@@ -55,7 +55,7 @@
 	numbersep=5pt,
 	numberstyle=\tiny\color{mygray}, 
 	rulecolor=\color{black},
-	title=Proposed algorithm	
+	%title=Proposed algorithm	
 }
 
 
@@ -341,8 +341,8 @@ Eq. \ref{eq:easymklotig} is a minimax problem that can be reduced  to a simple q
 %\end{equation}
 In the following sections, we will refer to this method as EasyMKL\footnote{EasyMKL implementation: github.com/jmikko/EasyMKL}.
 %and we have to provide it only $\KK^A$, the dataset $\XX$ and $\yy$ to evaluate equation \ref{eq:easyeta}, and the EasyMKL regularization hyperparameter $\Lambda$.
-
-
+%
+%
 \section{Proposed framework}
 %Often, to work well MKL algorithms require an high number of kernels, and when we use structured data as input, such as graphs, the computational effort to calculate each of them can be high. Moreover each kernel requires an amount of memory that depends on the number of samples, making the MKL approach unpractical when the number of samples and the number of kernels are huge.
 %In order to avoid these problems, 
@@ -382,7 +382,7 @@ In all models, we considered kernels calculated in less that 1 hour, rejecting o
 The baselines used to compare our method consist on a SVM with kernels (a)\kval: the kernel is the one which has the best validation score, (b)\ksum: the kernel is the average of all base kernels, (c)\kmkl: the kernel is a combination of all base kernels using EasyMKL.
 For each baseline, the computation of all kernels is required.
 The hyper-parameters are chosen using a nested 10-fold CV procedure, and they are $C\in\{2^i, i:-3\dots6\}$, and $\Lambda\in\{0,0.1\dots1\}$ for \kmkl.
-
+%
 
 Firstly, we performed some experiments to check how many samples are required to make $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ similar.
 In our context two weights vectors are similar if they provide the same top kernels. The metric used for comparison is the Jaccard similarity score. \figurename\ \ref{fig:jaccard} shows the Jaccard score between the indices of top kernels selected using $\boldsymbol{\eta}$ and $\hat{\boldsymbol{\eta}}$ with different threshold and different subsampling dimension.
@@ -400,9 +400,9 @@ According to preliminary results, we fix the dimension of subset used in the fir
 To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training data and perform a 10-fold cross validation using EasyMKL to combine kernels and SVM as base learner. Then we fit the model with the best combination and select the top kernels.
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
 (1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.
-In all of these methods we use a SVM as base learner. The hyper-parameters sets are the same used in baselines.\\
+In all of these methods we use a SVM as base learner. The hyper-parameters sets are the same used in baselines.
 \tablename\ \ref{tab:res} shows the AUC score, standard deviation and computation time used to make kernels and models for all problems.
-
+%
 %\begin{table}[]
 %\centering
 %\resizebox{\textwidth}{!}{
@@ -429,10 +429,11 @@ In all of these methods we use a SVM as base learner. The hyper-parameters sets 
 %\caption{AUC score, standard deviation and computational time for all baselines and all subsampling proposed methods.}
 %\label{tab:res}
 %\end{table}
-
-
-\begin{table}[]
+%
+%
+\begin{table}[t]
 \centering
+\small
 \resizebox{\textwidth}{!}{
 \begin{tabular}{l|c|ccc|ccc}
 \hline\hline
@@ -457,9 +458,9 @@ CAS     & 4337 & \res{0.92}{0.01} & - & \res{0.92}{0.01} & \res{0.92}{0.01} & \r
 \caption{AUC score, standard deviation and computational time for all baselines and all subsampling proposed methods.}
 \label{tab:res}
 \end{table}
-
+%
 \section{Discussion and conclusion} 
-
+%
 We have presented an efficient approach to model selection for graph kernels
 based on the multiple kernel learning framework. We have shown how working on
 small subsets (up to 10\%) of the data yields results that are stable and
@@ -476,9 +477,9 @@ comprehensive and easy to use software package.
 % ****************************************************************************
 % BIBLIOGRAPHY AREA
 % ****************************************************************************
-
+%
 \begin{footnotesize}
-
+%
 % IF YOU DO NOT USE BIBTEX, USE THE FOLLOWING SAMPLE SCHEME FOR THE REFERENCES
 % ----------------------------------------------------------------------------
 
@@ -487,18 +488,17 @@ comprehensive and easy to use software package.
 % IF YOU USE BIBTEX,
 % - DELETE THE TEXT BETWEEN THE TWO ABOVE DASHED LINES
 % - UNCOMMENT THE NEXT TWO LINES AND REPLACE 'Name_Of_Your_BibFile'
-
+%
 \bibliographystyle{unsrt}
 \bibliography{donini,biblio,Mendeley}
-
+%
 \end{footnotesize}
-
+%
 % ****************************************************************************
 % END OF BIBLIOGRAPHY AREA
 % ****************************************************************************
 
 \end{document}
-
 
 
 
