@@ -402,7 +402,7 @@ To learn $\hat{\boldsymbol{\eta}}$ we chose a random subsampling of training dat
 In the second step we calculate the top kernel matrices using the whole training data and combine it to get the kernel. We propose 3 different methods to perform this combination:
 (1)\ksmkl: using the EasyMKL algorithm, (2)\kssum: calculating the average of kernels, (3)\ksw: using the same weights (rescaled) from the first learning step.
 In all of these methods we use a SVM as base learner. The hyper-parameters sets are the same used in baselines.
-\tablename\ \ref{tab:res} shows the AUC score, standard deviation and computation time.\footnote{We used an Intel(R) Xeon(R) CPU E5-2680 2.70GHz, 256GB (RAM).}
+\tablename\ \ref{tab:res} shows the AUC score, standard deviation and computation time\footnote{We used an Intel(R) Xeon(R) CPU E5-2680 2.70GHz, 256GB (RAM).}.
  used to make kernels and models for all problems.
 %
 %\begin{table}[]
